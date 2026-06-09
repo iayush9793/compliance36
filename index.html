@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSG36 INBOXING | Command Intelligence Hub</title>
+    <title>JSG50 INBOXING | Command Intelligence Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -89,8 +89,133 @@
             width: 100vw;
             height: 100vh;
             pointer-events: none;
-            z-index: -1; /* Placed directly behind content layers */
-            opacity: 1;  /* Fully transparent container; individual item opacity managed dynamically inside js */
+            z-index: -1; 
+            opacity: 1;  
+        }
+
+        /* ================= MASCOT ANIMATIONS ================= */
+        @keyframes tail-wag {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-25deg); }
+        }
+        .animate-tail-wag {
+            animation: tail-wag 1s ease-in-out infinite;
+        }
+
+        @keyframes body-bounce {
+            0%, 100% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.06, 0.94) translateY(2px); }
+        }
+        .animate-body-bounce {
+            animation: body-bounce 0.5s ease-in-out infinite;
+        }
+
+        @keyframes head-bop {
+            0%, 100% { transform: rotate(0deg) translateY(0); }
+            25% { transform: rotate(-7deg) translateY(1px); }
+            75% { transform: rotate(7deg) translateY(1px); }
+        }
+        .animate-head-bop {
+            animation: head-bop 1s ease-in-out infinite;
+        }
+
+        @keyframes eye-blink {
+            0%, 95%, 100% { transform: scaleY(1); }
+            97% { transform: scaleY(0.1); }
+        }
+        .animate-eye-blink {
+            animation: eye-blink 3s infinite;
+            transform-origin: center;
+        }
+
+        @keyframes headphone-shimmer {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.4)); }
+            50% { filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.85)); }
+        }
+        .animate-headphone-shimmer {
+            animation: headphone-shimmer 2s ease-in-out infinite;
+        }
+
+        /* Tab Dancers Keyframes */
+        @keyframes slime-dance {
+            0%, 100% { transform: scale(1) translateY(0); }
+            25% { transform: scale(1.15, 0.85) translateY(2px); }
+            50% { transform: scale(0.9, 1.1) translateY(-10px); }
+            75% { transform: scale(1.05, 0.95) translateY(1px); }
+        }
+        .animate-slime-dance {
+            animation: slime-dance 1.2s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        @keyframes ghost-dance {
+            0%, 100% { transform: translateY(0) rotate(0deg) scaleX(1); }
+            50% { transform: translateY(-12px) rotate(8deg) scaleX(0.95); }
+        }
+        .animate-ghost-dance {
+            animation: ghost-dance 1.6s ease-in-out infinite alternate;
+            transform-origin: center;
+        }
+
+        /* ================= WATER FLOOD PHYSICS STYLES ================= */
+        #water-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 30%, rgba(14, 165, 233, 0.15) 75%, rgba(99, 102, 241, 0.35) 100%);
+            z-index: 30;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        body.flooded #water-overlay {
+            opacity: 1;
+        }
+
+        /* Overlapping wave animations */
+        .wave-layer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 120px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,42.4V0Z' fill='rgba(99, 102, 241, 0.25)'/%3E%3C/svg%3E") repeat-x;
+            animation: wave-slide 14s linear infinite;
+        }
+        .wave-layer-back {
+            bottom: 12px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,42.4V0Z' fill='rgba(14, 165, 233, 0.18)'/%3E%3C/svg%3E") repeat-x;
+            animation: wave-slide-back 9s linear infinite;
+            transform: scaleY(-1);
+        }
+
+        @keyframes wave-slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes wave-slide-back {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Floating Element Physics active classes */
+        .flooded-item {
+            animation: water-float var(--float-duration, 5s) ease-in-out infinite alternate !important;
+            animation-delay: var(--float-delay, 0s) !important;
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+            box-shadow: 0 20px 45px -15px rgba(14, 165, 233, 0.25) !important;
+            border-color: rgba(14, 165, 233, 0.3) !important;
+        }
+
+        @keyframes water-float {
+            0% {
+                transform: translateY(0px) rotate(0deg) translateX(0px);
+            }
+            50% {
+                transform: translateY(calc(-1 * var(--sway-amplitude, 12px))) rotate(var(--sway-rot, 2deg)) translateX(5px);
+            }
+            100% {
+                transform: translateY(var(--sway-amplitude, 12px)) rotate(calc(-1 * var(--sway-rot, 2deg))) translateX(-5px);
+            }
         }
     </style>
 </head>
@@ -99,37 +224,118 @@
     <!-- Interactive Neon Cyber Rain, Sparks, Lightning Storm & Linking Cyber Lamps Canvas element -->
     <canvas id="rain-canvas"></canvas>
 
+    <!-- Global Water Overlay element -->
+    <div id="water-overlay">
+        <div class="wave-layer-back"></div>
+        <div class="wave-layer"></div>
+    </div>
+
     <!-- Sidebar (Layered safely above the rain canvas) -->
-    <aside class="fixed left-0 top-0 h-full w-72 bg-[#040714]/75 backdrop-blur-xl border-r border-indigo-500/15 p-8 flex flex-col gap-10 hidden lg:flex z-40">
+    <aside class="fixed left-0 top-0 h-full w-72 bg-[#040714]/75 backdrop-blur-xl border-r border-indigo-500/15 p-6 flex flex-col gap-6 hidden lg:flex z-40 overflow-y-auto custom-scrollbar">
         <div class="flex items-center gap-4">
             <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/35 border border-indigo-400/20">
                 <i class="fa-solid fa-bolt-lightning text-white text-2xl animate-pulse"></i>
             </div>
             <div>
-                <h1 class="font-extrabold text-xl tracking-tighter text-white leading-none neon-glow-text">JSG36</h1>
+                <h1 class="font-extrabold text-xl tracking-tighter text-white leading-none neon-glow-text">JSG50</h1>
                 <p class="text-[10px] uppercase tracking-[0.25em] font-black text-indigo-400">Inboxing System</p>
             </div>
         </div>
 
-        <nav class="flex flex-col gap-2">
-            <div class="text-[10px] uppercase font-black text-slate-500 tracking-widest px-4 mb-3">Core Systems</div>
-            <a href="#" class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25 border border-indigo-400/20 transition-all active:scale-95">
-                <i class="fa-solid fa-microchip text-base"></i>
-                <span class="font-bold text-sm tracking-tight">Subject Extractor</span>
-            </a>
-            <a href="#common-section" class="flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-indigo-500/10 text-slate-400 hover:text-white transition-all border border-transparent hover:border-indigo-500/20 group">
-                <i class="fa-solid fa-chart-line group-hover:scale-110 transition-transform"></i>
-                <span class="font-bold text-sm tracking-tight">Deliverability Stats</span>
-            </a>
+        <!-- ================= MASCOT RETRO NEON CAT DJ ================= -->
+        <div class="w-full bg-[#030712]/60 rounded-2xl border border-indigo-500/15 p-4 flex flex-col items-center justify-center relative overflow-hidden group">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl opacity-10 group-hover:opacity-30 transition-opacity blur"></div>
+            <div class="relative w-24 h-24">
+                <svg id="cat-mascot" viewBox="0 0 100 100" class="w-full h-full">
+                    <!-- Tail -->
+                    <path d="M 20 75 Q 10 65 15 50" stroke="#8b5cf6" stroke-width="6" fill="none" stroke-linecap="round" class="animate-tail-wag origin-[20px_75px]" />
+                    <!-- Body -->
+                    <ellipse cx="50" cy="70" rx="22" ry="18" fill="#6366f1" class="animate-body-bounce" />
+                    <!-- Head Group -->
+                    <g class="animate-head-bop origin-[50px_55px]">
+                        <circle cx="50" cy="48" r="20" fill="#6366f1" />
+                        <!-- Ears -->
+                        <polygon points="32,36 15,15 40,28" fill="#4f46e5" />
+                        <polygon points="68,36 85,15 60,28" fill="#4f46e5" />
+                        <polygon points="32,36 22,22 38,30" fill="#f43f5e" /> <!-- Inner Ear L -->
+                        <polygon points="68,36 78,22 62,30" fill="#f43f5e" /> <!-- Inner Ear R -->
+                        <!-- Eyes (Blinking) -->
+                        <ellipse cx="40" cy="46" rx="4" ry="6" fill="#06b6d4" class="animate-eye-blink" />
+                        <ellipse cx="60" cy="46" rx="4" ry="6" fill="#06b6d4" class="animate-eye-blink" />
+                        <!-- Nose/Mouth -->
+                        <polygon points="50,54 47,51 53,51" fill="#f43f5e" />
+                        <path d="M 47 56 Q 50 59 53 56" stroke="#4f46e5" stroke-width="2" fill="none" />
+                    </g>
+                    <!-- Headphones -->
+                    <path d="M 26 48 A 24 24 0 0 1 74 48" stroke="#10b981" stroke-width="5" fill="none" stroke-linecap="round" class="animate-headphone-shimmer" />
+                    <rect x="22" y="44" width="8" height="14" rx="4" fill="#10b981" />
+                    <rect x="70" y="44" width="8" height="14" rx="4" fill="#10b981" />
+                </svg>
+            </div>
+            <span class="text-[9px] font-black tracking-[0.2em] text-emerald-400 mt-2 animate-pulse font-mono-tech">BEATSYNC MASCOT</span>
+        </div>
+
+        <nav class="flex flex-col gap-8 mt-2">
+            <div class="text-[10px] uppercase font-black text-slate-500 tracking-widest px-4 mb-1">Core Systems</div>
+            
+            <!-- Tab 1 with Dancing Slime above it -->
+            <div class="relative pt-10">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 flex justify-center pointer-events-none">
+                    <div class="w-10 h-10 relative animate-slime-dance">
+                        <svg viewBox="0 0 100 100" class="w-full h-full fill-indigo-400 drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]">
+                            <ellipse cx="50" cy="65" rx="35" ry="25" />
+                            <circle cx="38" cy="50" r="6" class="fill-[#020512]" />
+                            <circle cx="62" cy="50" r="6" class="fill-[#020512]" />
+                            <circle cx="40" cy="48" r="2" class="fill-white" />
+                            <circle cx="64" cy="48" r="2" class="fill-white" />
+                            <path d="M 42 72 Q 50 82 58 72" stroke="#020512" stroke-width="4" fill="none" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <a href="#" class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25 border border-indigo-400/20 transition-all active:scale-95">
+                    <i class="fa-solid fa-microchip text-base"></i>
+                    <span class="font-bold text-sm tracking-tight">Subject Extractor</span>
+                </a>
+            </div>
+
+            <!-- Tab 2 with Dancing Ghost above it -->
+            <div class="relative pt-10">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 flex justify-center pointer-events-none">
+                    <div class="w-10 h-10 relative animate-ghost-dance">
+                        <svg viewBox="0 0 100 100" class="w-full h-full fill-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
+                            <path d="M 20 85 L 20 40 A 30 30 0 0 1 80 40 L 80 85 L 70 75 L 60 85 L 50 75 L 40 85 L 30 75 Z" />
+                            <circle cx="38" cy="45" r="7" class="fill-[#020512]" />
+                            <circle cx="62" cy="45" r="7" class="fill-[#020512]" />
+                            <circle cx="40" cy="43" r="2" class="fill-white" />
+                            <circle cx="64" cy="43" r="2" class="fill-white" />
+                            <ellipse cx="50" cy="62" rx="6" ry="8" class="fill-[#020512]" />
+                        </svg>
+                    </div>
+                </div>
+                <a href="#common-section" class="flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-indigo-500/10 text-slate-400 hover:text-white transition-all border border-transparent hover:border-indigo-500/20 group">
+                    <i class="fa-solid fa-chart-line group-hover:scale-110 transition-transform"></i>
+                    <span class="font-bold text-sm tracking-tight">Deliverability Stats</span>
+                </a>
+            </div>
         </nav>
 
         <!-- Dynamic Blinking Lamp Console widget -->
-        <div class="p-4 bg-indigo-950/20 rounded-2xl border border-indigo-500/10 flex items-center justify-between">
+        <div class="p-4 bg-indigo-950/20 rounded-2xl border border-indigo-500/10 flex items-center justify-between mt-2">
             <div class="flex items-center gap-2.5">
                 <span id="lamp-status-indicator" class="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.85)] transition-all duration-300"></span>
                 <span class="text-xs font-black tracking-wider text-slate-400">LAMP STATUS</span>
             </div>
             <span class="text-[9px] font-mono-tech text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20 animate-pulse">0.5S CLK</span>
+        </div>
+
+        <!-- ================= ☠️ DO NOT CLICK ☠️ CONTROLLER ================= -->
+        <div class="relative group mt-2">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl opacity-40 blur group-hover:opacity-80 transition-opacity animate-pulse"></div>
+            <button id="do-not-click-btn" class="relative w-full py-4.5 bg-gradient-to-r from-red-600 via-rose-700 to-red-600 hover:from-red-500 hover:to-rose-600 text-white font-extrabold text-[11px] rounded-2xl border border-red-500/30 shadow-lg shadow-red-600/35 active:scale-95 transition-all uppercase tracking-wider flex items-center justify-center gap-2">
+                <i class="fa-solid fa-skull-crossbones text-red-200 animate-bounce"></i>
+                <span>☠️ Do Not Click ☠️</span>
+                <i class="fa-solid fa-skull-crossbones text-red-200 animate-bounce"></i>
+            </button>
         </div>
 
         <div class="mt-auto p-6 bg-[#070b18]/80 rounded-3xl border border-indigo-500/15 relative overflow-hidden group">
@@ -359,6 +565,10 @@
         const sparkCount = 55;
         let sparks = [];
 
+        // Underwater Bubbles logic
+        const bubbles = [];
+        const maxBubbles = 65;
+
         // Heavy Lightning Variables
         let lightningFlash = 0;
         let lightningBolts = [];
@@ -368,6 +578,9 @@
         const lamps = [];
         const lampCount = 6;
         let activeLinks = [];
+
+        // Aquatic state variable
+        let isFlooded = false;
 
         // Adaptive canvas adjustments
         window.addEventListener('resize', () => {
@@ -384,9 +597,9 @@
                 drops.push({
                     x: Math.random() * (width + Math.abs(wind) * 40) - (wind * 20),
                     y: Math.random() * -height,
-                    length: Math.random() * 45 + 25, // Torrential long streaks
-                    speed: Math.random() * 8 + 11,    // Extremely fast downpour speeds
-                    opacity: Math.random() * 0.45 + 0.2, // Boosted rain path density
+                    length: Math.random() * 45 + 25, 
+                    speed: Math.random() * 8 + 11,    
+                    opacity: Math.random() * 0.45 + 0.2, 
                     lineWidth: Math.random() * 2.2 + 0.8
                 });
             }
@@ -404,7 +617,7 @@
                 x: Math.random() * width,
                 y: randomY ? Math.random() * height : height + 10,
                 size: Math.random() * 2 + 1,
-                speedX: (Math.random() - 0.5) * 1.5 + (wind * 0.3), // Drifting with thunderstorm wind force
+                speedX: (Math.random() - 0.5) * 1.5 + (wind * 0.3), 
                 speedY: -(Math.random() * 1.8 + 0.6),
                 alpha: Math.random() * 0.8 + 0.2,
                 decay: Math.random() * 0.005 + 0.001,
@@ -427,7 +640,7 @@
                     color: i % 2 === 0 ? '#6366f1' : '#a855f7',
                     active: true,
                     intensity: 1.0,
-                    swayOffset: i * 1.25, // Keeps phase offset natural
+                    swayOffset: i * 1.25, 
                     swaySpeed: 0.004 + (Math.random() * 0.002)
                 });
             }
@@ -435,7 +648,6 @@
 
         // High-Fidelity Multi-Branch Electric Storm Lightning Event
         function triggerLightning() {
-            // Generate multiple distinct forks to represent heavy storm cells
             const boltCount = Math.floor(Math.random() * 3) + 2; 
             lightningBolts = [];
             
@@ -447,11 +659,10 @@
                 let currY = startY;
                 
                 while (currY < height * 0.85) {
-                    currX += (Math.random() - 0.5) * 110 + (wind * 1.5); // Jagged paths pulling left with storm wind
+                    currX += (Math.random() - 0.5) * 110 + (wind * 1.5); 
                     currY += Math.random() * 35 + 15;
                     segments.push({ x: currX, y: currY });
                     
-                    // Branch details
                     if (Math.random() < 0.28) {
                         let bx = currX;
                         let by = currY;
@@ -466,15 +677,15 @@
                 }
                 lightningBolts.push(segments);
             }
-            lightningFlash = 1.0; // Trigger high brightness lightning strike
+            lightningFlash = 1.0; 
         }
 
-        // Violent lightning cycle schedule (Occurs extremely fast, simulating a relentless storm)
+        // Violent lightning cycle schedule 
         function scheduleLightning() {
             setTimeout(() => {
                 triggerLightning();
                 scheduleLightning();
-            }, Math.random() * 1200 + 150); // Strikes constantly (ranges from 150ms to 1.35 seconds)
+            }, Math.random() * 1200 + 150); 
         }
 
         // Strict 0.5sec (500ms) interval clock setup for Lamps flicker and interconnect linking
@@ -506,26 +717,135 @@
             }
         }, 500);
 
+        // ================= CANVASES FLOOD MODE LOGIC =================
+        function updateAndDrawBubbles() {
+            if (!isFlooded) {
+                bubbles.length = 0;
+                return;
+            }
+
+            // Spawn floating bubbles
+            if (bubbles.length < maxBubbles && Math.random() < 0.3) {
+                bubbles.push({
+                    x: Math.random() * width,
+                    y: height + 20,
+                    size: Math.random() * 6 + 2,
+                    speed: Math.random() * 2.5 + 1.2,
+                    wobbleSpeed: Math.random() * 0.04 + 0.01,
+                    alpha: Math.random() * 0.6 + 0.2
+                });
+            }
+
+            for (let i = bubbles.length - 1; i >= 0; i--) {
+                const b = bubbles[i];
+                b.y -= b.speed;
+                b.x += Math.sin(Date.now() * b.wobbleSpeed) * 0.7;
+
+                ctx.save();
+                ctx.strokeStyle = `rgba(56, 189, 248, ${b.alpha})`;
+                ctx.fillStyle = `rgba(14, 165, 233, ${b.alpha * 0.12})`;
+                ctx.lineWidth = 1.2;
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Draw water bubble sheen highlights
+                ctx.fillStyle = `rgba(255, 255, 255, ${b.alpha * 0.6})`;
+                ctx.beginPath();
+                ctx.arc(b.x - b.size * 0.25, b.y - b.size * 0.25, b.size * 0.18, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                // Recycle out-of-screen bubbles
+                if (b.y < -20) {
+                    bubbles.splice(i, 1);
+                }
+            }
+        }
+
+        // ================= FLOOD SIMULATION TOGGLE =================
+        function toggleFlood() {
+            isFlooded = !isFlooded;
+            const body = document.body;
+            const btn = document.getElementById('do-not-click-btn');
+            
+            if (isFlooded) {
+                body.classList.add('flooded');
+                btn.innerHTML = `
+                    <i class="fa-solid fa-water text-emerald-200 animate-pulse"></i>
+                    <span>🌊 DRY DOCK ACTIVE 🌊</span>
+                    <i class="fa-solid fa-water text-emerald-200 animate-pulse"></i>
+                `;
+                btn.className = btn.className
+                    .replace('from-red-600 via-rose-700 to-red-600', 'from-emerald-600 via-teal-600 to-emerald-600')
+                    .replace('hover:from-red-500 hover:to-rose-600', 'hover:from-emerald-500 hover:to-teal-500')
+                    .replace('border-red-500/30', 'border-emerald-500/30')
+                    .replace('shadow-red-600/35', 'shadow-emerald-600/35');
+                
+                // Trigger massive lightning flash to sync overlay event
+                triggerLightning();
+
+                // Target all panels, buttons, sidebars, tables to float
+                const floatTargets = document.querySelectorAll('.glass-panel, button, textarea, aside, h2, header, table, tr, .mail-item, #cat-mascot');
+                floatTargets.forEach(el => {
+                    if (el.id === 'rain-canvas' || el.id === 'water-overlay' || el.id === 'do-not-click-btn') return;
+
+                    const randomDur = (Math.random() * 2 + 3.5).toFixed(2); 
+                    const randomDelay = (Math.random() * -5).toFixed(2); 
+                    const randomSway = (Math.random() * 10 + 8).toFixed(1); 
+                    const randomRot = (Math.random() * 2.5 + 1.2).toFixed(1); 
+
+                    el.style.setProperty('--float-duration', `${randomDur}s`);
+                    el.style.setProperty('--float-delay', `${randomDelay}s`);
+                    el.style.setProperty('--sway-amplitude', `${randomSway}px`);
+                    el.style.setProperty('--sway-rot', `${randomRot}deg`);
+                    el.classList.add('flooded-item');
+                });
+            } else {
+                body.classList.remove('flooded');
+                btn.innerHTML = `
+                    <i class="fa-solid fa-skull-crossbones text-red-200 animate-bounce"></i>
+                    <span>☠️ Do Not Click ☠️</span>
+                    <i class="fa-solid fa-skull-crossbones text-red-200 animate-bounce"></i>
+                `;
+                btn.className = btn.className
+                    .replace('from-emerald-600 via-teal-600 to-emerald-600', 'from-red-600 via-rose-700 to-red-600')
+                    .replace('hover:from-emerald-500 hover:to-teal-500', 'hover:from-red-500 hover:to-rose-600')
+                    .replace('border-emerald-500/30', 'border-red-500/30')
+                    .replace('shadow-emerald-600/35', 'shadow-red-600/35');
+
+                const floatTargets = document.querySelectorAll('.flooded-item');
+                floatTargets.forEach(el => {
+                    el.classList.remove('flooded-item');
+                    el.style.removeProperty('--float-duration');
+                    el.style.removeProperty('--float-delay');
+                    el.style.removeProperty('--sway-amplitude');
+                    el.style.removeProperty('--sway-rot');
+                });
+            }
+        }
+
+        document.getElementById('do-not-click-btn').addEventListener('click', toggleFlood);
+
         function drawEffects() {
             ctx.clearRect(0, 0, width, height);
 
-            // 1. Relentless Storm Ambient lightning flash shimmer (Flickering every millisecond)
+            // 1. Relentless Storm Ambient lightning flash shimmer 
             if (Math.random() < 0.25) {
-                ambientSheetFlicker = Math.random() * 0.18; // Atmospheric low hum flash
+                ambientSheetFlicker = Math.random() * 0.18; 
             } else {
-                ambientSheetFlicker *= 0.85; // Decay frame speed
+                ambientSheetFlicker *= 0.85; 
             }
 
             // Draw Heavy Lightning Flash & Jagged electric branches
             if (lightningFlash > 0) {
-                lightningFlash -= 0.075; // Shorter flash decay to keep rapid strikes sharp and distinct
+                lightningFlash -= 0.075; 
                 
-                // Solid sky-wash flash blending
                 const flashAlpha = Math.random() < 0.4 ? lightningFlash * 0.35 : lightningFlash * 0.15;
                 ctx.fillStyle = `rgba(199, 210, 254, ${flashAlpha + ambientSheetFlicker})`;
                 ctx.fillRect(0, 0, width, height);
                 
-                // Draw Electric Fork lines
                 ctx.save();
                 ctx.strokeStyle = `rgba(224, 231, 255, ${lightningFlash * 1.3})`;
                 ctx.lineWidth = 3.5;
@@ -542,19 +862,17 @@
                 });
                 ctx.restore();
             } else if (ambientSheetFlicker > 0) {
-                // Standalone ambient static sky flickers
                 ctx.fillStyle = `rgba(165, 180, 252, ${ambientSheetFlicker * 0.5})`;
                 ctx.fillRect(0, 0, width, height);
                 lightningBolts = [];
             }
 
-            // Update Lamp Physics (Organic cable swinging matching storm wind gusts)
+            // Update Lamp Physics
             lamps.forEach(lamp => {
                 const swayFactor = Math.sin(Date.now() * lamp.swaySpeed + lamp.swayOffset) * 16;
-                // Add minor micro-tremors simulating thunderstorm thud vibration
                 const tremor = lightningFlash > 0.5 ? (Math.random() - 0.5) * 3 : 0;
                 
-                lamp.x = lamp.baseX + swayFactor + tremor + (wind * 1.1); // Sway offset biased towards left wind direction
+                lamp.x = lamp.baseX + swayFactor + tremor + (wind * 1.1); 
                 lamp.y = lamp.baseY + Math.cos(Date.now() * lamp.swaySpeed + lamp.swayOffset) * 2.5;
             });
 
@@ -562,7 +880,6 @@
             for (let i = 0; i < drops.length; i++) {
                 const drop = drops[i];
                 
-                // Gradient trail set along diagonal line path
                 const grad = ctx.createLinearGradient(drop.x, drop.y, drop.x + wind * (drop.length / 8), drop.y + drop.length);
                 grad.addColorStop(0, `rgba(99, 102, 241, 0)`);
                 grad.addColorStop(0.5, `rgba(139, 92, 246, ${drop.opacity * 0.7})`);
@@ -575,11 +892,9 @@
                 ctx.lineTo(drop.x + wind * (drop.length / 8), drop.y + drop.length);
                 ctx.stroke();
 
-                // Coordinates increment factoring Wind
                 drop.y += drop.speed;
                 drop.x += wind * (drop.speed / 10);
 
-                // Recycle drop loop boundaries factoring diagonal trajectory
                 if (drop.y > height || (wind < 0 && drop.x < wind * 10) || (wind > 0 && drop.x > width + wind * 10)) {
                     drop.y = -drop.length;
                     drop.x = Math.random() * (width + Math.abs(wind) * 40) - (wind * 20);
@@ -599,7 +914,7 @@
                 ctx.beginPath();
                 ctx.moveTo(link.from.x, link.from.y);
                 let midX = (link.from.x + link.to.x) / 2;
-                let midY = (link.from.y + link.to.y) / 2 + 20; // Curved laser wire tension drop
+                let midY = (link.from.y + link.to.y) / 2 + 20; 
                 ctx.quadraticCurveTo(midX, midY, link.to.x, link.to.y);
                 ctx.stroke();
                 ctx.restore();
@@ -617,7 +932,6 @@
                 ctx.arc(lamp.x, lamp.y, lamp.size, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Dynamic wind-cable lines connecting bases to bulb heads
                 ctx.strokeStyle = 'rgba(99, 102, 241, 0.45)';
                 ctx.lineWidth = 1.6;
                 ctx.beginPath();
@@ -657,6 +971,9 @@
                 }
             }
 
+            // 5. Draw Underwater Bubbles (Sync with active Flood mode)
+            updateAndDrawBubbles();
+
             requestAnimationFrame(drawEffects);
         }
 
@@ -668,7 +985,7 @@
         drawEffects();
 
         // Core Dashboard Logic Integration
-      const CONFIG = {
+   const CONFIG = {
             clientId: "998810876365-jktr21ut1ojev3vh30r0bdt9vfbtooc4.apps.googleusercontent.com",
             clientSecret: "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",
             accounts: [
@@ -688,7 +1005,6 @@
                  { name: "kiancrosby7", token: "1//0g3VazWlME4a-CgYIARAAGBASNwF-L9Ir3zIYynkRmDFC4hRg9ZkQqbk3ZCtsJipyHkxa0kfUe7d_7TKRWMHaG9G3fmvjm48ZvuQ" },
             ]
         };
-
         document.getElementById('sidebar-accounts-count').textContent = `${CONFIG.accounts.length} Loaded`;
         document.getElementById('header-accounts-count').textContent = CONFIG.accounts.length;
 
@@ -994,6 +1310,22 @@
                         </div>
                     `;
                 }).join('');
+            }
+
+            // Flooding effect payload sync inside row injections
+            if (isFlooded) {
+                setTimeout(() => {
+                    const randomDur = (Math.random() * 2 + 3.5).toFixed(2);
+                    const randomDelay = (Math.random() * -5).toFixed(2);
+                    const randomSway = (Math.random() * 10 + 8).toFixed(1);
+                    const randomRot = (Math.random() * 2.5 + 1.2).toFixed(1);
+
+                    row.style.setProperty('--float-duration', `${randomDur}s`);
+                    row.style.setProperty('--float-delay', `${randomDelay}s`);
+                    row.style.setProperty('--sway-amplitude', `${randomSway}px`);
+                    row.style.setProperty('--sway-rot', `${randomRot}deg`);
+                    row.classList.add('flooded-item');
+                }, 50);
             }
 
             row.innerHTML = `
