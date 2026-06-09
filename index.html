@@ -1,102 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSG36 INBOXING | Intelligence Hub</title>
+    <title>JSG50 INBOXING | Command Intelligence Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Fira+Code:wght=400;600&display=swap');
         
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+        }
+        
+        .font-mono-tech {
+            font-family: 'Fira Code', monospace;
+        }
+
         /* Custom Scrollbars */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar { 
+            width: 6px; 
+            height: 6px; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-track { 
+            background: rgba(15, 23, 42, 0.3); 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+            background: rgba(99, 102, 241, 0.3); 
+            border-radius: 10px; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.6); 
+        }
         
+        /* Keyframe Animations */
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-slide { animation: slideIn 0.4s ease forwards; }
-        
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        .animate-slide { 
+            animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
         }
-        .shimmer-bg { position: relative; overflow: hidden; }
-        .shimmer-bg::after {
-            content: "";
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
-            animation: shimmer 2s infinite;
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(99, 102, 241, 0.15); }
+            50% { box-shadow: 0 0 25px rgba(99, 102, 241, 0.35); }
+        }
+        .pulse-glow {
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+
+        /* Cyber Glassmorphism Styles - Re-calibrated for beautiful rain and spark visibility */
+        .glass-panel {
+            background: rgba(8, 12, 24, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+        }
+
+        .glass-panel-interactive {
+            background: rgba(8, 12, 24, 0.45);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-panel-interactive:hover {
+            background: rgba(15, 23, 42, 0.75);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Neon Text Accents */
+        .neon-glow-text {
+            text-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
+        }
+        .neon-glow-text-emerald {
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+        }
+
+        /* Background Canvas Isolation */
+        #rain-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1; /* Placed directly behind content layers */
+            opacity: 1;  /* Fully transparent container; individual item opacity managed dynamically inside js */
         }
     </style>
 </head>
-<body class="bg-[#020617] text-slate-200 min-h-screen selection:bg-indigo-500/30 overflow-x-hidden custom-scrollbar">
+<body class="bg-[#020512] text-slate-200 min-h-screen selection:bg-indigo-500/30 overflow-x-hidden custom-scrollbar relative">
 
-    <!-- Sidebar -->
-    <aside class="fixed left-0 top-0 h-full w-72 bg-[#0b0f1a] border-r border-slate-800/40 p-8 flex flex-col gap-10 hidden lg:flex z-50">
+    <!-- Interactive Neon Cyber Rain, Sparks, Lightning Storm & Linking Cyber Lamps Canvas element -->
+    <canvas id="rain-canvas"></canvas>
+
+    <!-- Sidebar (Layered safely above the rain canvas) -->
+    <aside class="fixed left-0 top-0 h-full w-72 bg-[#040714]/75 backdrop-blur-xl border-r border-indigo-500/15 p-8 flex flex-col gap-10 hidden lg:flex z-40">
         <div class="flex items-center gap-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-indigo-500/20">
-                <i class="fa-solid fa-bolt-lightning text-white text-2xl"></i>
+            <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/35 border border-indigo-400/20">
+                <i class="fa-solid fa-bolt-lightning text-white text-2xl animate-pulse"></i>
             </div>
             <div>
-                <h1 class="font-extrabold text-xl tracking-tighter text-white leading-none">JSG36</h1>
-                <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-indigo-400">Inboxing</p>
+                <h1 class="font-extrabold text-xl tracking-tighter text-white leading-none neon-glow-text">JSG50</h1>
+                <p class="text-[10px] uppercase tracking-[0.25em] font-black text-indigo-400">Inboxing System</p>
             </div>
         </div>
 
         <nav class="flex flex-col gap-2">
-            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-widest px-4 mb-4">Core Systems</div>
-            <a href="#" class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-indigo-600 text-white shadow-xl shadow-indigo-600/30 transition-all">
-                <i class="fa-solid fa-microchip"></i>
+            <div class="text-[10px] uppercase font-black text-slate-500 tracking-widest px-4 mb-3">Core Systems</div>
+            <a href="#" class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25 border border-indigo-400/20 transition-all active:scale-95">
+                <i class="fa-solid fa-microchip text-base"></i>
                 <span class="font-bold text-sm tracking-tight">Subject Extractor</span>
             </a>
-            <a href="#common-section" class="flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-800/50 text-slate-400 transition-all border border-transparent hover:border-slate-700/50">
-                <i class="fa-solid fa-chart-line"></i>
+            <a href="#common-section" class="flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-indigo-500/10 text-slate-400 hover:text-white transition-all border border-transparent hover:border-indigo-500/20 group">
+                <i class="fa-solid fa-chart-line group-hover:scale-110 transition-transform"></i>
                 <span class="font-bold text-sm tracking-tight">Deliverability Stats</span>
             </a>
         </nav>
 
-        <div class="mt-auto p-6 bg-slate-900/40 rounded-3xl border border-slate-800/40">
-            <p class="text-[10px] text-slate-500 mb-3 uppercase tracking-[0.15em] font-black">Active Nodes</p>
-            <div class="space-y-3">
+        <!-- Dynamic Blinking Lamp Console widget -->
+        <div class="p-4 bg-indigo-950/20 rounded-2xl border border-indigo-500/10 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <span id="lamp-status-indicator" class="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.85)] transition-all duration-300"></span>
+                <span class="text-xs font-black tracking-wider text-slate-400">LAMP STATUS</span>
+            </div>
+            <span class="text-[9px] font-mono-tech text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20 animate-pulse">0.5S CLK</span>
+        </div>
+
+        <div class="mt-auto p-6 bg-[#070b18]/80 rounded-3xl border border-indigo-500/15 relative overflow-hidden group">
+            <div class="absolute -right-10 -bottom-10 w-24 h-24 bg-indigo-500/5 rounded-full blur-xl group-hover:bg-indigo-500/10 transition-all"></div>
+            <p class="text-[10px] text-indigo-400 mb-3 uppercase tracking-[0.15em] font-black">Active Nodes</p>
+            <div class="space-y-3 relative z-10">
                 <div class="flex items-center justify-between text-xs font-bold">
                     <span class="text-slate-400">Google API</span>
-                    <span class="text-emerald-500 flex items-center gap-2">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-emerald-400 flex items-center gap-2 font-black text-[10px] neon-glow-text-emerald">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
                         ONLINE
                     </span>
                 </div>
                 <div class="flex items-center justify-between text-xs font-bold">
                     <span class="text-slate-400">Accounts</span>
-                    <span id="sidebar-accounts-count" class="text-white">12 Loaded</span>
+                    <span id="sidebar-accounts-count" class="text-white font-mono-tech">12 Loaded</span>
                 </div>
             </div>
         </div>
     </aside>
 
-    <!-- Main Content -->
-    <main class="lg:ml-72 p-6 md:p-12 max-w-6xl mx-auto">
-        <header class="mb-10">
-            <h2 class="text-4xl font-black text-white tracking-tight mb-2">Subject & Delivery <span class="text-indigo-500">Hub</span></h2>
-            <p class="text-slate-400 text-base font-medium">Extracting last 3 subject lines, timestamps, and folders across <span id="header-accounts-count" class="text-indigo-400 font-bold">12</span> master accounts.</p>
+    <!-- Main Content Panel (Floating container cleanly positioned above rain) -->
+    <main class="lg:ml-72 p-6 md:p-12 max-w-6xl mx-auto relative z-10">
+        <header class="mb-10 animate-slide">
+            <h2 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-3">
+                Subject & Delivery <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400 neon-glow-text">Hub</span>
+            </h2>
+            <p class="text-slate-400 text-sm md:text-base font-medium">
+                Scanning the last 3 subject lines, internal folders, and arrival offsets across <span id="header-accounts-count" class="text-indigo-400 font-extrabold bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 rounded-full">12</span> master nodes.
+            </p>
         </header>
 
-        <!-- TOP: Commonality Detection & Action triggers -->
+        <!-- TOP: Commonality Detection Panel -->
         <section id="common-section" class="hidden w-full pb-10">
-            <div class="w-full bg-gradient-to-r from-[#0b0f1a] to-[#0f1425] border-t-2 border-indigo-500/60 rounded-[2.5rem] p-8 shadow-2xl flex flex-col justify-between gap-6">
+            <div class="w-full glass-panel border-t-4 border-t-indigo-500 rounded-[2.5rem] p-8 shadow-2xl flex flex-col justify-between gap-6 pulse-glow">
                 <div>
-                    <label class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-2 block">IDENTIFIED COMMON SUBJECT</label>
+                    <label class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-3 block">IDENTIFIED COMMON SUBJECT LINE</label>
                     <div class="relative group">
                         <input id="common-subject-input" readonly
-                            class="w-full bg-[#020617] border border-indigo-500/20 rounded-2xl py-4 pl-6 pr-16 text-white font-bold text-base focus:outline-none transition-all group-hover:border-indigo-500/40"
+                            class="w-full bg-[#030712]/90 border border-indigo-500/30 rounded-2xl py-4.5 pl-6 pr-16 text-white font-bold text-sm md:text-base focus:outline-none transition-all group-hover:border-indigo-500/50 text-ellipsis"
                             placeholder="Analyzing data convergence...">
                         <button id="copy-btn" 
-                            class="absolute right-2 top-1/2 -translate-y-1/2 p-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all active:scale-90 shadow-lg shadow-indigo-600/30">
+                            class="absolute right-2.5 top-1/2 -translate-y-1/2 p-3.5 bg-gradient-to-br from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl transition-all active:scale-90 shadow-lg shadow-indigo-600/30">
                             <i class="fa-solid fa-copy text-base"></i>
                         </button>
                     </div>
@@ -105,31 +181,31 @@
                 <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6">
                     <div class="flex-grow">
                         <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest block mb-2">Subject Match Convergence</span>
-                        <div class="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-800">
-                            <div id="match-bar" class="bg-indigo-500 h-full w-0 transition-all duration-500"></div>
+                        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-indigo-500/20">
+                            <div id="match-bar" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-full w-0 transition-all duration-1000 shadow-[0_0_10px_rgba(99,102,241,0.5)]"></div>
                         </div>
                     </div>
-                    <div class="flex items-center justify-center px-6 py-3 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 min-w-[100px]">
+                    <div class="flex items-center justify-center px-6 py-3 bg-[#030712] rounded-2xl border border-indigo-500/20 min-w-[120px]">
                         <div class="text-center">
-                            <span class="text-[9px] text-indigo-300 font-black uppercase tracking-tighter block leading-none">Match Rate</span>
+                            <span class="text-[9px] text-indigo-300 font-black uppercase tracking-tighter block leading-none mb-1">Match Rate</span>
                             <span id="match-percent" class="text-2xl font-black text-indigo-400 italic">0%</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Interactive Preview Trigger: Displayed only if mail landed in Muskan's Account -->
-                <div id="preview-trigger-container" class="hidden animate-slide mt-2 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400 flex-shrink-0">
-                            <i class="fa-solid fa-circle-check text-lg"></i>
+                <!-- Interactive Preview Trigger (Activated only on Muskan's node) -->
+                <div id="preview-trigger-container" class="hidden animate-slide mt-2 p-5 bg-gradient-to-r from-emerald-500/5 to-indigo-500/5 rounded-2xl border border-emerald-500/20 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                            <i class="fa-solid fa-circle-check text-xl animate-pulse"></i>
                         </div>
                         <div>
-                            <h5 id="preview-trigger-title" class="text-sm font-bold text-white leading-tight">Mail Detected in Muskan's Account</h5>
-                            <p id="preview-trigger-desc" class="text-[11px] text-slate-400">Payload verified. Preview is pulled strictly from <strong class="text-indigo-400">Muskan Sharma</strong> (musk9090) to inspect actual inbox layout.</p>
+                            <h5 id="preview-trigger-title" class="text-sm font-black text-white leading-tight">Mail Detected in Muskan's Account</h5>
+                            <p id="preview-trigger-desc" class="text-[11px] text-slate-400 mt-1">Payload verified. Preview is pulled strictly from <strong class="text-indigo-400">Muskan Sharma</strong> (musk9090) to inspect actual inbox layout.</p>
                         </div>
                     </div>
-                    <button id="show-preview-btn" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-lg shadow-indigo-600/30 active:scale-95 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                    <button id="show-preview-btn" class="w-full md:w-auto px-6 py-3.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:opacity-90 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-xl shadow-indigo-600/30 active:scale-95 flex items-center justify-center gap-2.5">
+                        <i class="fa-solid fa-magnifying-glass-chart text-xs"></i>
                         Show Mail Preview
                     </button>
                 </div>
@@ -137,26 +213,27 @@
         </section>
 
         <div class="flex flex-col gap-8">
-            <!-- TOP: Target Domain Entry -->
+            <!-- TOP: Target Domain Entry Area -->
             <section class="w-full">
-                <div class="bg-[#0b0f1a] border border-slate-800/60 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
+                <div class="glass-panel rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
+                    <div class="absolute -left-20 -top-20 w-48 h-48 bg-purple-500/5 rounded-full blur-3xl"></div>
                     <div class="flex flex-col lg:flex-row gap-8 items-start relative z-10">
                         <div class="flex-grow w-full">
                             <div class="flex items-center justify-between mb-4">
-                                <label class="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Target Domains</label>
-                                <span class="text-[10px] bg-slate-800 text-slate-400 px-3 py-1 rounded-full font-bold">MULTIPLE INPUT ENABLED</span>
+                                <label class="text-xs font-black text-indigo-400 uppercase tracking-[0.2em] neon-glow-text">Target Domains</label>
+                                <span class="text-[10px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-3 py-1 rounded-full font-black tracking-wider uppercase">Multiple Input Enabled</span>
                             </div>
                             <textarea id="domain-input" 
-                                class="w-full h-36 bg-[#020617] border border-slate-800/80 rounded-2xl p-6 text-slate-200 placeholder:text-slate-700 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/40 transition-all resize-none text-sm font-mono leading-relaxed"
+                                class="w-full h-36 bg-[#030712]/80 border border-indigo-500/15 rounded-2xl p-6 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/40 transition-all resize-none text-sm font-mono-tech leading-relaxed"
                                 placeholder="example-sender.com&#10;delivery-node.net"></textarea>
                         </div>
                         <div class="w-full lg:w-72 lg:pt-8 flex flex-col gap-3">
                             <button id="sync-btn" 
-                                class="group w-full py-5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-2xl font-black text-sm flex items-center justify-center gap-3 transition-all shadow-xl shadow-indigo-600/20 active:scale-[0.97]">
+                                class="group w-full py-5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-2xl font-black text-sm flex items-center justify-center gap-3 transition-all shadow-xl shadow-indigo-600/20 active:scale-[0.97]">
                                 <i class="fa-solid fa-bolt-lightning group-hover:rotate-12 transition-transform"></i>
                                 <span class="tracking-widest uppercase">Sync Network</span>
                             </button>
-                            <button id="clear-btn" class="hidden w-full py-3 text-slate-500 hover:text-red-400 text-[10px] font-black transition-colors uppercase tracking-widest">
+                            <button id="clear-btn" class="hidden w-full py-3 text-slate-500 hover:text-rose-400 text-[10px] font-black transition-colors uppercase tracking-widest">
                                 <i class="fa-solid fa-trash-can mr-2"></i> Clear Workspace
                             </button>
                         </div>
@@ -166,17 +243,17 @@
 
             <!-- MIDDLE: Network Feed with Active Spam Filtering control -->
             <section class="w-full">
-                <div class="bg-[#0b0f1a] border border-slate-800/60 rounded-[2.5rem] overflow-hidden shadow-2xl min-h-[450px] flex flex-col">
-                    <div class="px-8 py-6 border-b border-slate-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/20">
-                        <h3 class="text-base font-black text-white flex items-center gap-3 tracking-tight">
+                <div class="glass-panel rounded-[2.5rem] overflow-hidden shadow-2xl min-h-[450px] flex flex-col">
+                    <div class="px-8 py-6 border-b border-indigo-500/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-indigo-950/20">
+                        <h3 class="text-xs font-black text-white flex items-center gap-3 tracking-widest uppercase">
                             DATA EXTRACTION FEED
-                            <div id="scan-progress" class="hidden h-1 w-32 bg-slate-800 rounded-full overflow-hidden">
-                                <div class="h-full bg-indigo-500 animate-[loading_2s_infinite]"></div>
+                            <div id="scan-progress" class="hidden h-1.5 w-32 bg-slate-900 rounded-full overflow-hidden border border-indigo-500/15">
+                                <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 animate-[loading_2s_infinite]"></div>
                             </div>
                         </h3>
                         
                         <!-- Toggle Button: Show/Hide Spam Emails dynamically -->
-                        <button id="toggle-spam-btn" class="hidden flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-800 text-xs font-black text-slate-400 hover:text-white hover:border-slate-700/60 rounded-xl transition-all active:scale-95">
+                        <button id="toggle-spam-btn" class="hidden flex items-center gap-2.5 px-4 py-2.5 bg-[#030712] border border-indigo-500/15 text-xs font-black text-slate-400 hover:text-white hover:border-indigo-500/30 rounded-xl transition-all active:scale-95">
                             <i id="toggle-spam-icon" class="fa-solid fa-eye-slash text-slate-500"></i>
                             <span id="toggle-spam-text">Show Spam Mails</span>
                             <span id="spam-counter" class="bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded text-[10px]">0 Hidden</span>
@@ -185,8 +262,8 @@
 
                     <!-- Empty State -->
                     <div id="empty-state" class="flex-grow flex flex-col items-center justify-center py-24 text-center">
-                        <div class="w-20 h-20 bg-indigo-500/5 rounded-full flex items-center justify-center mb-6 border border-indigo-500/10">
-                            <i class="fa-solid fa-server text-3xl text-indigo-500/30"></i>
+                        <div class="w-24 h-24 bg-indigo-500/5 rounded-full flex items-center justify-center mb-6 border border-indigo-500/10 shadow-[0_0_20px_rgba(99,102,241,0.05)]">
+                            <i class="fa-solid fa-server text-3xl text-indigo-500/30 animate-pulse"></i>
                         </div>
                         <h4 class="text-lg font-bold text-slate-400 mb-1">Awaiting Domain Sequence</h4>
                         <p class="text-xs text-slate-600 font-bold uppercase tracking-widest">Input target to initiate sync</p>
@@ -197,14 +274,14 @@
                         <div class="overflow-x-auto custom-scrollbar">
                             <table class="w-full text-left border-collapse">
                                 <thead>
-                                    <tr class="text-slate-500 text-[10px] uppercase tracking-[0.2em] font-black border-b border-slate-800/60">
+                                    <tr class="text-slate-500 text-[10px] uppercase tracking-[0.25em] font-black border-b border-indigo-500/10">
                                         <th class="px-8 py-6">Identity</th>
                                         <th class="px-8 py-6">Domain</th>
                                         <th class="px-8 py-6">Inbox / Spam Subjects (Last 3)</th>
                                         <th class="px-8 py-6 text-right">Verification</th>
                                     </tr>
                                 </thead>
-                                <tbody id="results-body" class="divide-y divide-slate-800/40">
+                                <tbody id="results-body" class="divide-y divide-indigo-500/5 bg-[#060a16]/30">
                                     <!-- Rows injected dynamically -->
                                 </tbody>
                             </table>
@@ -217,38 +294,36 @@
 
     <!-- HIGH-FIDELITY SECURE MAIL PREVIEW MODAL -->
     <div id="preview-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden opacity-0 transition-all duration-300">
-        <div class="bg-[#0b0f1a] border border-slate-800 w-full max-w-4xl rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] transform scale-95 transition-all duration-300">
+        <div class="bg-[#0b0f1a] border border-indigo-500/25 w-full max-w-4xl rounded-[2rem] shadow-[0_0_50px_rgba(99,102,241,0.25)] overflow-hidden flex flex-col max-h-[85vh] transform scale-95 transition-all duration-300">
             <!-- Modal Header -->
-            <div class="px-8 py-6 border-b border-slate-800/60 bg-slate-900/20 flex items-center justify-between">
+            <div class="px-8 py-6 border-b border-indigo-500/10 bg-indigo-950/20 flex items-center justify-between">
                 <div>
-                    <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-full font-black uppercase tracking-wider">Muskan Sharma Node Audit</span>
+                    <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-full font-black uppercase tracking-wider shadow-[0_0_10px_rgba(99,102,241,0.1)]">Muskan Sharma Node Audit</span>
                     <h3 id="modal-subject" class="text-lg font-black text-white mt-1.5 line-clamp-1">Email Subject</h3>
                 </div>
-                <button id="close-modal-btn" class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 hover:text-white flex items-center justify-center transition-all">
+                <button id="close-modal-btn" class="w-10 h-10 rounded-full bg-slate-900 border border-indigo-500/10 hover:border-indigo-500/30 text-slate-400 hover:text-white flex items-center justify-center transition-all">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
             <!-- Modal Metadata Panel -->
-            <div class="px-8 py-4 bg-slate-900/40 border-b border-slate-800/40 flex flex-wrap gap-4 items-center text-xs text-slate-400 font-semibold">
+            <div class="px-8 py-4 bg-indigo-950/10 border-b border-indigo-500/10 flex flex-wrap gap-4 items-center text-xs text-slate-400 font-semibold">
                 <div class="flex items-center gap-2">
                     <span class="text-slate-500">Audited Node:</span>
                     <span id="modal-account" class="text-emerald-400 font-bold">musk9090 (Muskan Sharma)</span>
                 </div>
-                <div class="w-1.5 h-1.5 rounded-full bg-slate-800"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-indigo-500/20"></div>
                 <div class="flex items-center gap-2">
                     <span class="text-slate-500">Network Sync Time:</span>
-                    <span id="modal-time" class="text-white font-mono">Jun 8 @ 02:57 PM</span>
+                    <span id="modal-time" class="text-white font-mono-tech">Jun 8 @ 02:57 PM</span>
                 </div>
-                <div class="w-1.5 h-1.5 rounded-full bg-slate-800"></div>
-                <div class="flex items-center gap-1 bg-amber-500/15 text-amber-400 px-2 py-0.5 rounded text-[10px] font-bold">
+                <div class="w-1.5 h-1.5 rounded-full bg-indigo-500/20"></div>
+                <div class="flex items-center gap-1 bg-amber-500/15 text-amber-400 px-2.5 py-0.5 rounded text-[10px] font-bold">
                     <i class="fa-solid fa-user-secret"></i> Unopened State Preserved
                 </div>
             </div>
-            <!-- Modal Body Content (Decoded iFrame Viewport) -->
+            <!-- Modal Body Content -->
             <div class="flex-grow overflow-y-auto p-8 bg-[#020617] relative min-h-[350px]">
-                <!-- fallback raw body layout -->
-                <div id="modal-body-fallback" class="hidden text-slate-300 whitespace-pre-wrap leading-relaxed font-mono text-sm"></div>
-                <!-- rich sandboxed viewport frame to isolate HTML content styles -->
+                <div id="modal-body-fallback" class="hidden text-slate-300 whitespace-pre-wrap leading-relaxed font-mono-tech text-sm"></div>
                 <iframe id="modal-body-frame" class="w-full h-full min-h-[380px] border-0 rounded-2xl bg-white hidden" sandbox="allow-same-origin"></iframe>
             </div>
         </div>
@@ -256,7 +331,7 @@
 
     <!-- NOTIFICATION BOX FOR FAILED MUSKAN PREVIEWS -->
     <div id="toast-notification" class="fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 transition-all duration-300 pointer-events-none">
-        <div class="bg-rose-900/95 border border-rose-500/30 text-rose-100 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 font-semibold text-sm">
+        <div class="bg-rose-950/95 border border-rose-500/30 text-rose-100 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 font-semibold text-sm">
             <i class="fa-solid fa-triangle-exclamation text-rose-400 text-lg"></i>
             <div>
                 <p class="font-bold">Muskan's Node Sync Issue</p>
@@ -266,28 +341,325 @@
     </div>
 
     <script>
-      const CONFIG = {
-            clientId: "998810876365-jktr21ut1ojev3vh30r0bdt9vfbtooc4.apps.googleusercontent.com",
-            clientSecret: "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",
-            accounts: [
-          { name: "agkartik8429", token: "1//0gesjD1QK4L1rCgYIARAAGBASNwF-L9Ir-DFo5-uUhfAIpJ1Fqu7foJmdN_gNTlcl_6sHYhXNfka1hsIpZfV0tVIh3Yas92MFvA0" },
-                 { name: "liveseedforall", token: "1//0gNNNmMZrjuhzCgYIARAAGBASNwF-L9Ire_zIx2bbnlq3L0wEhELUUmAua3zMtZqCOrLz1RnSu3ZG9DDojjURxcmtEVHkObrknVY" },
-                { name: "agkar9090", token: "1//0gQeu8MkAUYg_CgYIARAAGBASNwF-L9IrmgY1f9Mw1VUva2vfXI0Lbh2HRmslJfIu2cALxPNS6QQBtq-B4LcKId-vFfB69ZJlZtI" },
-                 { name: "ashwinbetterinbox", token: "1//0gaBSbBHlfJDiCgYIARAAGBASNwF-L9IrignXj3WeCLd9hkymbenMDFvOhCZLk0RygSqPe2yFlQSsAsIoO7DoLEzXAfSuCkJOm-E" },
-                { name: "musk9090", token: "1//0grSCGJkLq3-iCgYIARAAGBASNwF-L9IrGQ6WKKnQqFsF3mdEby7w7_61P7gvzDJOnffzFYmb3IgglPuk6HbGoyPhYoU2DphePG0" },
-                { name: "liveseedacc", token: "1//0gjFxd6-S5Hp_CgYIARAAGBASNwF-L9IrZVm2MGQUcZWzEXMd_O9U386ObC549czcddU4yADXCp5douRWj5lAc-y2msVcQN9yotk" },
-                { name: "markanthony", token: "1//0gO8mn3pPxlyVCgYIARAAGBASNwF-L9Irn7uzxcpYEL6PfXBFi0W02XFgQapUoHrhW4ZjCdKlMMh9jkQUUtkD7a_yVk0u08QtiUQ" },
-                { name: "liveseedmm", token: "1//0gCjcgsRwdJdjCgYIARAAGBASNwF-L9IrbPt_O9h28YsFQDhUPvhKrw9R1gBqjaoMwpcViwO_KM4QbYSX_xCazjZCk-a5Zr4w6sc" },
-                { name: "arcsan", token: "1//0gLPQLVQXOOdICgYIARAAGBASNwF-L9IrOLm45i-Unbqj4R1cEzcXArQavRMNChkkaAF31QRuBWMpDf3JnvvYEI38HxmFFkxjNQI" },
-                { name: "ashwinsiropn", token: "1//0g28Ag_PhAIfKCgYIARAAGBASNwF-L9Ir7RmQ1p9qJvw0NkMak89UvJSoF16uJ-wUwQd4HxfcINB_MXEFgMm_2lNdb7erKs8fTvE" },
- 
-                { name: "ssoniya2987", token: "1//0gLGFQu2V9AkOCgYIARAAGBASNwF-L9IrJ35D2J9MRWRUm7vGwRJ6uV3v_GT5zFNWGQvpNQpjOCJZM6DrUqXGju_VK4UVYfCVyjs" },
- 
-                 { name: "kiancrosby7", token: "1//0g3VazWlME4a-CgYIARAAGBASNwF-L9Ir3zIYynkRmDFC4hRg9ZkQqbk3ZCtsJipyHkxa0kfUe7d_7TKRWMHaG9G3fmvjm48ZvuQ" },
-            ]
-        };
+        // Cyber Neon Rain, Sparks, Lightning Storm & Connecting Lamps Canvas Implementation
+        const canvas = document.getElementById('rain-canvas');
+        const ctx = canvas.getContext('2d');
 
-        // Inject dynamic account metrics into headers and sidebars
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        // Interactive Matrix Rain Parameters (Now with boosted visual clarity)
+        const dropCount = 75;
+        let drops = [];
+
+        // Dynamic Glow Sparks (Floating dust/ambient sparks that drift upwards)
+        const sparkCount = 45;
+        let sparks = [];
+
+        // Storm Lightning variables
+        let lightningFlash = 0;
+        let lightningBolts = [];
+
+        // Interactive Lamps & Links Configuration
+        const lamps = [];
+        const lampCount = 6;
+        let activeLinks = [];
+
+        // Adaptive canvas adjustments
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            setupDrops();
+            setupSparks();
+            setupLamps();
+        });
+
+        function setupDrops() {
+            drops = [];
+            for (let i = 0; i < dropCount; i++) {
+                drops.push({
+                    x: Math.random() * width,
+                    y: Math.random() * -height,
+                    length: Math.random() * 35 + 20, // Longer, cleaner drops
+                    speed: Math.random() * 5 + 6,    // Dynamic falling rate
+                    opacity: Math.random() * 0.45 + 0.15, // High-visibility opacity values
+                    lineWidth: Math.random() * 1.8 + 0.8
+                });
+            }
+        }
+
+        function setupSparks() {
+            sparks = [];
+            for (let i = 0; i < sparkCount; i++) {
+                createSpark(true); // Populate sparks across whole screenspace at load
+            }
+        }
+
+        function createSpark(randomY = false) {
+            sparks.push({
+                x: Math.random() * width,
+                y: randomY ? Math.random() * height : height + 10, // Drift upwards from bottom on cycle reset
+                size: Math.random() * 2 + 1,
+                speedX: (Math.random() - 0.5) * 1.2,
+                speedY: -(Math.random() * 1.2 + 0.4), // Drifting upwards
+                alpha: Math.random() * 0.7 + 0.3,
+                decay: Math.random() * 0.004 + 0.001,
+                color: Math.random() > 0.5 ? 'rgba(99, 102, 241,' : 'rgba(168, 85, 247,', // Brand Indigo or Purple Sparks
+                flicker: Math.random() * 0.08 + 0.02
+            });
+        }
+
+        // Initialize hanging lamps at top of the screen
+        function setupLamps() {
+            lamps.length = 0;
+            for (let i = 0; i < lampCount; i++) {
+                lamps.push({
+                    x: (width / (lampCount + 1)) * (i + 1),
+                    y: 45,
+                    size: 9,
+                    glowSize: 22,
+                    color: i % 2 === 0 ? '#6366f1' : '#a855f7', // Alternate Indigo and Purple colors
+                    active: true,
+                    intensity: 1.0
+                });
+            }
+        }
+
+        // Programmatic Storm Lightning Event
+        function triggerLightning() {
+            const boltCount = Math.floor(Math.random() * 2) + 1;
+            lightningBolts = [];
+            
+            for (let b = 0; b < boltCount; b++) {
+                let startX = Math.random() * width;
+                let startY = 0;
+                let segments = [{ x: startX, y: startY }];
+                let currX = startX;
+                let currY = startY;
+                
+                while (currY < height * 0.75) {
+                    currX += (Math.random() - 0.5) * 90;
+                    currY += Math.random() * 45 + 20;
+                    segments.push({ x: currX, y: currY });
+                    
+                    // Add secondary branches
+                    if (Math.random() < 0.22) {
+                        let bx = currX;
+                        let by = currY;
+                        let branch = [{ x: bx, y: by }];
+                        while (by < currY + 120) {
+                            bx += (Math.random() - 0.5) * 45;
+                            by += Math.random() * 25 + 10;
+                            branch.push({ x: bx, y: by });
+                        }
+                        lightningBolts.push(branch);
+                    }
+                }
+                lightningBolts.push(segments);
+            }
+            lightningFlash = 1.0; // Instantly start flash fade down
+        }
+
+        // Recurring Thunderstorm schedule
+        function scheduleLightning() {
+            setTimeout(() => {
+                triggerLightning();
+                scheduleLightning();
+            }, Math.random() * 6000 + 5000); // Triggers every 5 to 11 seconds
+        }
+
+        // Strict 0.5sec (500ms) interval clock setup for Lamps flicker and interconnect linking
+        setInterval(() => {
+            const sidebarLamp = document.getElementById('lamp-status-indicator');
+            const toggleState = Math.random() > 0.15; // 85% active chance to keep lamps buzzing beautifully
+
+            // Update hanging lamps status
+            lamps.forEach(lamp => {
+                lamp.active = Math.random() > 0.18;
+                lamp.intensity = lamp.active ? (Math.random() * 0.45 + 0.55) : 0.08;
+            });
+
+            // Rebuild linked connector lines between active lamps
+            activeLinks = [];
+            for (let i = 0; i < lamps.length - 1; i++) {
+                if (lamps[i].active && lamps[i+1].active && Math.random() > 0.25) {
+                    activeLinks.push({ from: lamps[i], to: lamps[i+1] });
+                }
+            }
+
+            // Sync HTML Sidebar lamp indicator
+            if (sidebarLamp) {
+                if (toggleState) {
+                    sidebarLamp.className = "w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,1.0)] transition-all duration-100";
+                } else {
+                    sidebarLamp.className = "w-3 h-3 rounded-full bg-indigo-900 shadow-none transition-all duration-100";
+                }
+            }
+        }, 500);
+
+        function drawEffects() {
+            ctx.clearRect(0, 0, width, height);
+
+            // 1. Draw Thunderstorm Ambient Lightning Flash & Electric Bolts
+            if (lightningFlash > 0) {
+                lightningFlash -= 0.035; // Decay rate
+                
+                // Overlay thunderstorm light flash matching brand palette
+                const flashAlpha = Math.random() < 0.35 ? lightningFlash * 0.28 : lightningFlash * 0.14;
+                ctx.fillStyle = `rgba(224, 231, 255, ${flashAlpha})`;
+                ctx.fillRect(0, 0, width, height);
+                
+                // Render bolts
+                ctx.save();
+                ctx.strokeStyle = `rgba(224, 231, 255, ${lightningFlash * 1.2})`;
+                ctx.lineWidth = 3;
+                ctx.shadowBlur = 25;
+                ctx.shadowColor = '#818cf8';
+                
+                lightningBolts.forEach(bolt => {
+                    ctx.beginPath();
+                    ctx.moveTo(bolt[0].x, bolt[0].y);
+                    for (let s = 1; s < bolt.length; s++) {
+                        ctx.lineTo(bolt[s].x, bolt[s].y);
+                    }
+                    ctx.stroke();
+                });
+                ctx.restore();
+            } else {
+                lightningBolts = [];
+            }
+
+            // 2. Draw Rain Drops (cascade behind panels)
+            for (let i = 0; i < drops.length; i++) {
+                const drop = drops[i];
+                
+                const grad = ctx.createLinearGradient(drop.x, drop.y, drop.x, drop.y + drop.length);
+                grad.addColorStop(0, `rgba(99, 102, 241, 0)`);
+                grad.addColorStop(0.6, `rgba(139, 92, 246, ${drop.opacity * 0.7})`);
+                grad.addColorStop(1, `rgba(99, 102, 241, ${drop.opacity})`);
+
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = drop.lineWidth;
+                ctx.beginPath();
+                ctx.moveTo(drop.x, drop.y);
+                ctx.lineTo(drop.x, drop.y + drop.length);
+                ctx.stroke();
+
+                // Speed calculation
+                drop.y += drop.speed;
+
+                // Reset drop loop boundaries
+                if (drop.y > height) {
+                    drop.y = -drop.length;
+                    drop.x = Math.random() * width;
+                    drop.speed = Math.random() * 5 + 6;
+                }
+            }
+
+            // 3. Draw Cyber Connector Lamps & Links (Laser threads)
+            activeLinks.forEach(link => {
+                ctx.save();
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = link.from.color;
+                ctx.strokeStyle = link.from.color;
+                ctx.globalAlpha = (link.from.intensity + link.to.intensity) / 2 * 0.8;
+                ctx.lineWidth = 2.2;
+                
+                // Curved glowing drop bridge link
+                ctx.beginPath();
+                ctx.moveTo(link.from.x, link.from.y);
+                let midX = (link.from.x + link.to.x) / 2;
+                let midY = (link.from.y + link.to.y) / 2 + 18; // Drop height of linkage curve
+                ctx.quadraticCurveTo(midX, midY, link.to.x, link.to.y);
+                ctx.stroke();
+                ctx.restore();
+            });
+
+            // Draw Lamps
+            lamps.forEach(lamp => {
+                ctx.save();
+                ctx.shadowBlur = lamp.glowSize * lamp.intensity;
+                ctx.shadowColor = lamp.color;
+                ctx.fillStyle = lamp.color;
+                ctx.globalAlpha = lamp.intensity;
+                
+                // Hanging bulb body
+                ctx.beginPath();
+                ctx.arc(lamp.x, lamp.y, lamp.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                // High-tension hanging vertical cables
+                ctx.strokeStyle = 'rgba(99, 102, 241, 0.45)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(lamp.x, 0);
+                ctx.lineTo(lamp.x, lamp.y - lamp.size);
+                ctx.stroke();
+                
+                ctx.restore();
+            });
+
+            // 4. Draw Glow Sparks (Drifting upward embers)
+            for (let i = sparks.length - 1; i >= 0; i--) {
+                const s = sparks[i];
+
+                const flick = 0.4 + Math.sin(Date.now() * s.flicker) * 0.6;
+                const currentAlpha = s.alpha * flick;
+
+                if (currentAlpha > 0) {
+                    ctx.save();
+                    ctx.shadowBlur = s.size * 4;
+                    ctx.shadowColor = s.color === 'rgba(99, 102, 241,' ? '#6366f1' : '#a855f7';
+                    
+                    ctx.fillStyle = s.color + currentAlpha + ')';
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                s.x += s.speedX;
+                s.y += s.speedY;
+                s.alpha -= s.decay;
+
+                if (s.alpha <= 0 || s.y < -10 || s.x < -10 || s.x > width + 10) {
+                    sparks.splice(i, 1);
+                    createSpark(false);
+                }
+            }
+
+            requestAnimationFrame(drawEffects);
+        }
+
+        // Start animation loops
+        setupDrops();
+        setupSparks();
+        setupLamps();
+        scheduleLightning();
+        drawEffects();
+
+        // Core Dashboard Logic Integration
+       const CONFIG = {
+            clientId: "998810876365-jktr21ut1ojev3vh30r0bdt9vfbtooc4.apps.googleusercontent.com",
+            clientSecret: "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",
+            accounts: [
+          { name: "agkartik8429", token: "1//0gesjD1QK4L1rCgYIARAAGBASNwF-L9Ir-DFo5-uUhfAIpJ1Fqu7foJmdN_gNTlcl_6sHYhXNfka1hsIpZfV0tVIh3Yas92MFvA0" },
+                 { name: "liveseedforall", token: "1//0gNNNmMZrjuhzCgYIARAAGBASNwF-L9Ire_zIx2bbnlq3L0wEhELUUmAua3zMtZqCOrLz1RnSu3ZG9DDojjURxcmtEVHkObrknVY" },
+                { name: "agkar9090", token: "1//0gQeu8MkAUYg_CgYIARAAGBASNwF-L9IrmgY1f9Mw1VUva2vfXI0Lbh2HRmslJfIu2cALxPNS6QQBtq-B4LcKId-vFfB69ZJlZtI" },
+                 { name: "ashwinbetterinbox", token: "1//0gaBSbBHlfJDiCgYIARAAGBASNwF-L9IrignXj3WeCLd9hkymbenMDFvOhCZLk0RygSqPe2yFlQSsAsIoO7DoLEzXAfSuCkJOm-E" },
+                { name: "musk9090", token: "1//0grSCGJkLq3-iCgYIARAAGBASNwF-L9IrGQ6WKKnQqFsF3mdEby7w7_61P7gvzDJOnffzFYmb3IgglPuk6HbGoyPhYoU2DphePG0" },
+                { name: "liveseedacc", token: "1//0gjFxd6-S5Hp_CgYIARAAGBASNwF-L9IrZVm2MGQUcZWzEXMd_O9U386ObC549czcddU4yADXCp5douRWj5lAc-y2msVcQN9yotk" },
+                { name: "markanthony", token: "1//0gO8mn3pPxlyVCgYIARAAGBASNwF-L9Irn7uzxcpYEL6PfXBFi0W02XFgQapUoHrhW4ZjCdKlMMh9jkQUUtkD7a_yVk0u08QtiUQ" },
+                { name: "liveseedmm", token: "1//0gCjcgsRwdJdjCgYIARAAGBASNwF-L9IrbPt_O9h28YsFQDhUPvhKrw9R1gBqjaoMwpcViwO_KM4QbYSX_xCazjZCk-a5Zr4w6sc" },
+                { name: "arcsan", token: "1//0gLPQLVQXOOdICgYIARAAGBASNwF-L9IrOLm45i-Unbqj4R1cEzcXArQavRMNChkkaAF31QRuBWMpDf3JnvvYEI38HxmFFkxjNQI" },
+                { name: "ashwinsiropn", token: "1//0g28Ag_PhAIfKCgYIARAAGBASNwF-L9Ir7RmQ1p9qJvw0NkMak89UvJSoF16uJ-wUwQd4HxfcINB_MXEFgMm_2lNdb7erKs8fTvE" },
+
+                { name: "ssoniya2987", token: "1//0gLGFQu2V9AkOCgYIARAAGBASNwF-L9IrJ35D2J9MRWRUm7vGwRJ6uV3v_GT5zFNWGQvpNQpjOCJZM6DrUqXGju_VK4UVYfCVyjs" },
+
+                 { name: "kiancrosby7", token: "1//0g3VazWlME4a-CgYIARAAGBASNwF-L9Ir3zIYynkRmDFC4hRg9ZkQqbk3ZCtsJipyHkxa0kfUe7d_7TKRWMHaG9G3fmvjm48ZvuQ" },
+            ]
+        };
+
         document.getElementById('sidebar-accounts-count').textContent = `${CONFIG.accounts.length} Loaded`;
         document.getElementById('header-accounts-count').textContent = CONFIG.accounts.length;
 
@@ -305,13 +677,11 @@
             percent: document.getElementById('match-percent'),
             matchBar: document.getElementById('match-bar'),
             
-            // Spam Filter Elements
             toggleSpamBtn: document.getElementById('toggle-spam-btn'),
             toggleSpamIcon: document.getElementById('toggle-spam-icon'),
             toggleSpamText: document.getElementById('toggle-spam-text'),
             spamCounter: document.getElementById('spam-counter'),
 
-            // Preview Modal Elements
             previewTrigger: document.getElementById('preview-trigger-container'),
             previewTriggerTitle: document.getElementById('preview-trigger-title'),
             previewTriggerDesc: document.getElementById('preview-trigger-desc'),
@@ -327,7 +697,7 @@
         };
 
         let lastResults = [];
-        let showSpamEmails = false; // Spam hidden by default
+        let showSpamEmails = false;
 
         async function getAccess(refreshToken) {
             const res = await fetch('https://oauth2.googleapis.com/token', {
@@ -345,7 +715,6 @@
             return data.access_token;
         }
 
-        // Base64 helper safe decoders for Gmail structures
         function decodeBase64(data) {
             try {
                 const base64 = data.replace(/-/g, '+').replace(/_/g, '/');
@@ -365,7 +734,6 @@
                 return decodeBase64(payload.body.data);
             }
             if (payload.parts) {
-                // Prioritize rich html, then plain text
                 let htmlPart = payload.parts.find(p => p.mimeType === 'text/html');
                 if (htmlPart && htmlPart.body && htmlPart.body.data) {
                     return decodeBase64(htmlPart.body.data);
@@ -374,7 +742,6 @@
                 if (plainPart && plainPart.body && plainPart.body.data) {
                     return decodeBase64(plainPart.body.data);
                 }
-                // Recursive lookup loop
                 for (let part of payload.parts) {
                     let recursiveResult = extractGmailBody(part);
                     if (recursiveResult) return recursiveResult;
@@ -402,13 +769,11 @@
                     const headers = msgData.payload.headers;
                     const subject = headers.find(h => h.name === 'Subject')?.value || "(Empty Subject)";
                     
-                    // Exact local timestamp setups
                     const dateRaw = headers.find(h => h.name === 'Date')?.value || "";
                     const dateObj = new Date(dateRaw);
                     const date = isNaN(dateObj) ? "" : dateObj.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
                     const time = isNaN(dateObj) ? "" : dateObj.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: true });
 
-                    // Raw Content extracts for sandbox previews
                     const snippet = msgData.snippet || "";
                     let parsedBody = "";
                     try {
@@ -417,7 +782,6 @@
                         parsedBody = snippet;
                     }
 
-                    // Retrieve tags/labels to register landing folder pathing
                     const labels = msgData.labelIds || [];
                     let landing = 'OTHER';
                     if (labels.includes('SPAM')) {
@@ -447,7 +811,6 @@
             const accountMaps = results.reduce((acc, curr) => {
                 if (!acc[curr.accName]) acc[curr.accName] = new Set();
                 curr.subjects.forEach(s => {
-                    // STRICT RULE: Only map/count subjects that landed successfully in the INBOX (exclude SPAM)
                     if (s.landing !== 'SPAM') {
                         acc[curr.accName].add(s.subject);
                     }
@@ -483,11 +846,11 @@
             
             if (topCount === totalAccounts) {
                 dom.commonInput.value = topSubject;
-                dom.percent.className = "text-2xl font-black text-emerald-400 italic";
+                dom.percent.className = "text-2xl font-black text-emerald-400 italic neon-glow-text-emerald";
             } else {
                 if (topCount > 1) {
                     dom.commonInput.value = `Partial Match: "${topSubject}"`;
-                    dom.percent.className = "text-2xl font-black text-indigo-400 italic";
+                    dom.percent.className = "text-2xl font-black text-indigo-400 italic neon-glow-text";
                 } else {
                     dom.commonInput.value = "No shared subject lines detected inside this sequence.";
                     dom.percent.textContent = "0%";
@@ -495,7 +858,6 @@
                 }
             }
 
-            // NEW RULE: Show the preview trigger if email data is successfully retrieved in Muskan's node (musk9090)
             const muskanAccountName = "musk9090";
             const muskanResult = results.find(item => item.accName === muskanAccountName);
             const hasMuskanMails = muskanResult && muskanResult.subjects && muskanResult.subjects.length > 0;
@@ -503,7 +865,6 @@
             if (hasMuskanMails) {
                 dom.previewTrigger.classList.remove('hidden');
                 
-                // Adjust description depending on match status
                 if (topCount === totalAccounts) {
                     dom.previewTriggerTitle.textContent = "100% Convergence Match Achieved";
                     dom.previewTriggerDesc.innerHTML = `Payload verified across all network nodes. Preview is pulled strictly from <strong class="text-indigo-400">Muskan Sharma</strong> (musk9090).`;
@@ -515,7 +876,6 @@
                 dom.previewTrigger.classList.add('hidden');
             }
 
-            // Calculate Spam visibility counters to configure toggle visibility
             updateSpamCounterUI();
         }
 
@@ -531,7 +891,6 @@
                 dom.toggleSpamBtn.classList.add('hidden');
             }
 
-            // Sync visual status of spam elements to global view state variables
             spamElements.forEach(el => {
                 if (showSpamEmails) {
                     el.classList.remove('hidden');
@@ -545,7 +904,6 @@
             const row = document.createElement('tr');
             row.className = "hover:bg-indigo-500/[0.03] transition-colors group animate-slide";
             
-            // Highlight Muskan Sharma account specifically in UI
             const isMuskan = (accName === 'musk9090');
             const accountLabel = isMuskan 
                 ? `<span class="text-indigo-400 font-black text-sm tracking-tight flex items-center gap-1.5"><i class="fa-solid fa-star text-xs text-amber-400 animate-pulse"></i>${accName}</span>` 
@@ -553,16 +911,16 @@
 
             const hasData = subjects && subjects.length > 0;
             const statusHtml = hasData 
-                ? `<div class="flex items-center gap-1.5 justify-end text-[9px] font-black text-emerald-400 bg-emerald-400/10 px-3 py-1.5 rounded-full border border-emerald-400/20">VERIFIED INTERACTION</div>`
+                ? `<div class="flex items-center gap-1.5 justify-end text-[9px] font-black text-emerald-400 bg-emerald-400/10 px-3 py-1.5 rounded-full border border-emerald-400/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">VERIFIED INTERACTION</div>`
                 : subjects === null 
                 ? `<div class="flex items-center gap-1.5 justify-end text-[9px] font-black text-rose-400 bg-rose-400/10 px-3 py-1.5 rounded-full border border-rose-400/20 text-center">AUTH EXPIRED</div>`
-                : `<div class="flex items-center gap-1.5 justify-end text-[9px] font-black text-slate-500 bg-slate-800 px-3 py-1.5 rounded-full">NO DATA RETRIEVED</div>`;
+                : `<div class="flex items-center gap-1.5 justify-end text-[9px] font-black text-slate-500 bg-[#030712] border border-indigo-500/10 px-3 py-1.5 rounded-full">NO DATA RETRIEVED</div>`;
 
             let subjectsHtml = '';
             if (subjects === null) {
-                subjectsHtml = `<span class="text-rose-400/80 text-xs font-bold">Please update authentication tokens for ${accName}</span>`;
+                subjectsHtml = `<span class="text-rose-400/80 text-xs font-bold font-mono-tech">Please update authentication tokens for ${accName}</span>`;
             } else if (subjects.length === 0) {
-                subjectsHtml = `<span class="text-slate-700 text-xs italic font-medium">Domain match not identified in last inbox scans</span>`;
+                subjectsHtml = `<span class="text-slate-600 text-xs italic font-medium">Domain match not identified in last inbox scans</span>`;
             } else {
                 subjectsHtml = subjects.map((s, i) => {
                     let badgeColor = "bg-slate-500/10 text-slate-400 border border-slate-500/20";
@@ -570,10 +928,10 @@
                     let isSpam = false;
                     
                     if (s.landing === 'PRIMARY') {
-                        badgeColor = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                        badgeColor = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.05)]";
                         folderIcon = "fa-inbox";
                     } else if (s.landing === 'SPAM') {
-                        badgeColor = "bg-rose-500/10 text-rose-400 border border-rose-500/20";
+                        badgeColor = "bg-rose-500/10 text-rose-400 border border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.05)]";
                         folderIcon = "fa-triangle-exclamation";
                         isSpam = true;
                     } else if (s.landing === 'PROMOTIONS') {
@@ -593,16 +951,16 @@
                     const spamClass = isSpam ? 'mail-item-spam hidden' : '';
 
                     return `
-                        <div class="mail-item ${spamClass} flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2 p-3 rounded-2xl bg-slate-900/60 border border-slate-800/60 text-xs hover:border-indigo-500/30 transition-all">
+                        <div class="mail-item ${spamClass} flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2.5 p-3 rounded-2xl bg-[#030712]/70 border border-indigo-500/5 text-xs hover:border-indigo-500/20 transition-all">
                             <div class="flex items-center gap-3 overflow-hidden">
-                                <span class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-[8px] font-black bg-slate-800 text-slate-400 rounded-md">${i+1}</span>
+                                <span class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-[8px] font-black bg-slate-900 border border-indigo-500/10 text-indigo-400 rounded-md">${i+1}</span>
                                 <span class="text-slate-100 font-bold truncate max-w-[280px]">${s.subject}</span>
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0 justify-end">
                                 <span class="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded ${badgeColor}">
                                     <i class="fa-solid ${folderIcon} text-[8px]"></i> ${s.landing}
                                 </span>
-                                <span class="text-[10px] font-bold text-indigo-400 flex-shrink-0 italic">${s.date} @ ${s.time}</span>
+                                <span class="text-[10px] font-bold text-indigo-400 flex-shrink-0 italic font-mono-tech">${s.date} @ ${s.time}</span>
                             </div>
                         </div>
                     `;
@@ -611,7 +969,7 @@
 
             row.innerHTML = `
                 <td class="px-8 py-5">${accountLabel}</td>
-                <td class="px-8 py-5"><span class="text-white font-mono text-xs font-black">${domain}</span></td>
+                <td class="px-8 py-5"><span class="text-white font-mono-tech text-xs font-black">${domain}</span></td>
                 <td class="px-8 py-5">${subjectsHtml}</td>
                 <td class="px-8 py-5 text-right">${statusHtml}</td>
             `;
@@ -624,14 +982,12 @@
             const spamElements = document.querySelectorAll('.mail-item-spam');
 
             if (showSpamEmails) {
-                // Showing Spam
                 dom.toggleSpamIcon.className = "fa-solid fa-eye text-rose-400 animate-pulse";
                 dom.toggleSpamText.textContent = "Hide Spam Mails";
                 dom.spamCounter.textContent = `${spamElements.length} Revealed`;
                 dom.spamCounter.className = "bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[10px]";
                 spamElements.forEach(el => el.classList.remove('hidden'));
             } else {
-                // Hiding Spam
                 dom.toggleSpamIcon.className = "fa-solid fa-eye-slash text-slate-500";
                 dom.toggleSpamText.textContent = "Show Spam Mails";
                 dom.spamCounter.textContent = `${spamElements.length} Hidden`;
@@ -651,7 +1007,7 @@
             dom.table.classList.remove('hidden');
             dom.clear.classList.remove('hidden');
             dom.commonSec.classList.remove('hidden');
-            dom.previewTrigger.classList.add('hidden'); // Hide preview until check completes
+            dom.previewTrigger.classList.add('hidden');
             dom.body.innerHTML = '';
             lastResults = [];
 
@@ -677,7 +1033,6 @@
             dom.sync.innerHTML = `<i class="fa-solid fa-bolt-lightning"></i><span class="tracking-widest uppercase">Sync Network</span>`;
         });
 
-        // Show Toast Notification if Muskan Preview is unavailable
         function showToast() {
             dom.toast.classList.remove('translate-y-12', 'opacity-0');
             dom.toast.classList.add('translate-y-0', 'opacity-100');
@@ -687,14 +1042,10 @@
             }, 5000);
         }
 
-        // Preview Trigger Handler - STRICTLY targeting Muskan Sharma (musk9090)
         dom.showPreviewBtn.addEventListener('click', () => {
             if (lastResults.length === 0) return;
 
-            // Grab the matching top subject value
             const targetSubject = dom.commonInput.value;
-            
-            // Search inside records SPECIFICALLY for Muskan Sharma's account ("musk9090")
             const muskanAccountName = "musk9090";
             const muskanResult = lastResults.find(item => item.accName === muskanAccountName);
 
@@ -703,8 +1054,6 @@
                 return;
             }
 
-            // Find a mail that matches the top common subject.
-            // If none matches (or match is less than 100%), fallback to Muskan's latest retrieved email.
             let matchedEmail = muskanResult.subjects.find(s => s.subject === targetSubject);
             if (!matchedEmail && muskanResult.subjects.length > 0) {
                 matchedEmail = muskanResult.subjects[0];
@@ -715,12 +1064,10 @@
                 dom.modalAccount.textContent = "musk9090 (Muskan Sharma)";
                 dom.modalTime.textContent = `${matchedEmail.date} @ ${matchedEmail.time}`;
 
-                // Check if rich HTML content or plain snippet is available
                 if (matchedEmail.body && matchedEmail.body.includes('<')) {
                     dom.modalBodyFallback.classList.add('hidden');
                     dom.modalBodyFrame.classList.remove('hidden');
 
-                    // INJECT CSS BLOCK: Complete prevention of link hover states and click events inside the iframe
                     const disableLinkInteractionsCSS = `
                         <style>
                             a, a *, [href], [onclick], button, input[type="submit"] {
@@ -737,19 +1084,16 @@
                     dom.modalBodyFallback.textContent = matchedEmail.body || matchedEmail.snippet || "No HTML body structure parsed.";
                 }
 
-                // Open modal with smooth transitions
                 dom.previewModal.classList.remove('hidden');
                 setTimeout(() => {
                     dom.previewModal.classList.remove('opacity-0');
                     dom.previewModal.querySelector('div').classList.remove('scale-95');
                 }, 50);
             } else {
-                // Muskan's node loaded but does not contain a previewable subject line
                 showToast();
             }
         });
 
-        // Close preview modal controller
         const hidePreviewModal = () => {
             dom.previewModal.classList.add('opacity-0');
             dom.previewModal.querySelector('div').classList.add('scale-95');
@@ -775,11 +1119,11 @@
                 document.body.removeChild(el);
                 
                 const originalIcon = dom.copy.innerHTML;
-                dom.copy.innerHTML = `<i class="fa-solid fa-check"></i>`;
-                dom.copy.className = dom.copy.className.replace('bg-indigo-600', 'bg-emerald-600');
+                dom.copy.innerHTML = `<i class="fa-solid fa-check animate-bounce"></i>`;
+                dom.copy.className = dom.copy.className.replace('from-indigo-600', 'from-emerald-600').replace('to-purple-600', 'to-emerald-500');
                 setTimeout(() => {
                     dom.copy.innerHTML = originalIcon;
-                    dom.copy.className = dom.copy.className.replace('bg-emerald-600', 'bg-indigo-600');
+                    dom.copy.className = dom.copy.className.replace('from-emerald-600', 'from-indigo-600').replace('to-emerald-500', 'to-purple-600');
                 }, 2000);
             }
         });
