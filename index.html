@@ -106,7 +106,7 @@
                 <i class="fa-solid fa-bolt-lightning text-white text-2xl animate-pulse"></i>
             </div>
             <div>
-                <h1 class="font-extrabold text-xl tracking-tighter text-white leading-none neon-glow-text">JSG 36</h1>
+                <h1 class="font-extrabold text-xl tracking-tighter text-white leading-none neon-glow-text">JSG36</h1>
                 <p class="text-[10px] uppercase tracking-[0.25em] font-black text-indigo-400">Inboxing System</p>
             </div>
         </div>
@@ -348,19 +348,23 @@
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
 
-        // Interactive Matrix Rain Parameters (Now with boosted visual clarity)
-        const dropCount = 75;
+        // Extremely Heavy Rain Parameters (Upped from 75 to 240 particles)
+        const dropCount = 240;
         let drops = [];
 
-        // Dynamic Glow Sparks (Floating dust/ambient sparks that drift upwards)
-        const sparkCount = 45;
+        // Continuous Storm Gale-Force Horizontal Wind Offset (-5 = strong wind blowing left)
+        const wind = -5.5;
+
+        // Glowing Sparks
+        const sparkCount = 55;
         let sparks = [];
 
-        // Storm Lightning variables
+        // Heavy Lightning Variables
         let lightningFlash = 0;
         let lightningBolts = [];
+        let ambientSheetFlicker = 0;
 
-        // Interactive Lamps & Links Configuration
+        // Interactive Lamps & Connections with Swaying Cables
         const lamps = [];
         const lampCount = 6;
         let activeLinks = [];
@@ -378,12 +382,12 @@
             drops = [];
             for (let i = 0; i < dropCount; i++) {
                 drops.push({
-                    x: Math.random() * width,
+                    x: Math.random() * (width + Math.abs(wind) * 40) - (wind * 20),
                     y: Math.random() * -height,
-                    length: Math.random() * 35 + 20, // Longer, cleaner drops
-                    speed: Math.random() * 5 + 6,    // Dynamic falling rate
-                    opacity: Math.random() * 0.45 + 0.15, // High-visibility opacity values
-                    lineWidth: Math.random() * 1.8 + 0.8
+                    length: Math.random() * 45 + 25, // Torrential long streaks
+                    speed: Math.random() * 8 + 11,    // Extremely fast downpour speeds
+                    opacity: Math.random() * 0.45 + 0.2, // Boosted rain path density
+                    lineWidth: Math.random() * 2.2 + 0.8
                 });
             }
         }
@@ -391,43 +395,48 @@
         function setupSparks() {
             sparks = [];
             for (let i = 0; i < sparkCount; i++) {
-                createSpark(true); // Populate sparks across whole screenspace at load
+                createSpark(true);
             }
         }
 
         function createSpark(randomY = false) {
             sparks.push({
                 x: Math.random() * width,
-                y: randomY ? Math.random() * height : height + 10, // Drift upwards from bottom on cycle reset
+                y: randomY ? Math.random() * height : height + 10,
                 size: Math.random() * 2 + 1,
-                speedX: (Math.random() - 0.5) * 1.2,
-                speedY: -(Math.random() * 1.2 + 0.4), // Drifting upwards
-                alpha: Math.random() * 0.7 + 0.3,
-                decay: Math.random() * 0.004 + 0.001,
-                color: Math.random() > 0.5 ? 'rgba(99, 102, 241,' : 'rgba(168, 85, 247,', // Brand Indigo or Purple Sparks
-                flicker: Math.random() * 0.08 + 0.02
+                speedX: (Math.random() - 0.5) * 1.5 + (wind * 0.3), // Drifting with thunderstorm wind force
+                speedY: -(Math.random() * 1.8 + 0.6),
+                alpha: Math.random() * 0.8 + 0.2,
+                decay: Math.random() * 0.005 + 0.001,
+                color: Math.random() > 0.5 ? 'rgba(99, 102, 241,' : 'rgba(168, 85, 247,',
+                flicker: Math.random() * 0.12 + 0.04
             });
         }
 
-        // Initialize hanging lamps at top of the screen
+        // Initialize hanging lamps at top of the screen with individual sway patterns
         function setupLamps() {
             lamps.length = 0;
             for (let i = 0; i < lampCount; i++) {
                 lamps.push({
-                    x: (width / (lampCount + 1)) * (i + 1),
-                    y: 45,
+                    baseX: (width / (lampCount + 1)) * (i + 1),
+                    baseY: 45,
+                    x: 0,
+                    y: 0,
                     size: 9,
                     glowSize: 22,
-                    color: i % 2 === 0 ? '#6366f1' : '#a855f7', // Alternate Indigo and Purple colors
+                    color: i % 2 === 0 ? '#6366f1' : '#a855f7',
                     active: true,
-                    intensity: 1.0
+                    intensity: 1.0,
+                    swayOffset: i * 1.25, // Keeps phase offset natural
+                    swaySpeed: 0.004 + (Math.random() * 0.002)
                 });
             }
         }
 
-        // Programmatic Storm Lightning Event
+        // High-Fidelity Multi-Branch Electric Storm Lightning Event
         function triggerLightning() {
-            const boltCount = Math.floor(Math.random() * 2) + 1;
+            // Generate multiple distinct forks to represent heavy storm cells
+            const boltCount = Math.floor(Math.random() * 3) + 2; 
             lightningBolts = [];
             
             for (let b = 0; b < boltCount; b++) {
@@ -437,19 +446,19 @@
                 let currX = startX;
                 let currY = startY;
                 
-                while (currY < height * 0.75) {
-                    currX += (Math.random() - 0.5) * 90;
-                    currY += Math.random() * 45 + 20;
+                while (currY < height * 0.85) {
+                    currX += (Math.random() - 0.5) * 110 + (wind * 1.5); // Jagged paths pulling left with storm wind
+                    currY += Math.random() * 35 + 15;
                     segments.push({ x: currX, y: currY });
                     
-                    // Add secondary branches
-                    if (Math.random() < 0.22) {
+                    // Branch details
+                    if (Math.random() < 0.28) {
                         let bx = currX;
                         let by = currY;
                         let branch = [{ x: bx, y: by }];
-                        while (by < currY + 120) {
-                            bx += (Math.random() - 0.5) * 45;
-                            by += Math.random() * 25 + 10;
+                        while (by < currY + 150) {
+                            bx += (Math.random() - 0.5) * 55 + wind;
+                            by += Math.random() * 20 + 10;
                             branch.push({ x: bx, y: by });
                         }
                         lightningBolts.push(branch);
@@ -457,32 +466,32 @@
                 }
                 lightningBolts.push(segments);
             }
-            lightningFlash = 1.0; // Instantly start flash fade down
+            lightningFlash = 1.0; // Trigger high brightness lightning strike
         }
 
-        // Recurring Thunderstorm schedule
+        // Violent lightning cycle schedule (Occurs extremely fast, simulating a relentless storm)
         function scheduleLightning() {
             setTimeout(() => {
                 triggerLightning();
                 scheduleLightning();
-            }, Math.random() * 6000 + 5000); // Triggers every 5 to 11 seconds
+            }, Math.random() * 1200 + 150); // Strikes constantly (ranges from 150ms to 1.35 seconds)
         }
 
         // Strict 0.5sec (500ms) interval clock setup for Lamps flicker and interconnect linking
         setInterval(() => {
             const sidebarLamp = document.getElementById('lamp-status-indicator');
-            const toggleState = Math.random() > 0.15; // 85% active chance to keep lamps buzzing beautifully
+            const toggleState = Math.random() > 0.15; 
 
             // Update hanging lamps status
             lamps.forEach(lamp => {
-                lamp.active = Math.random() > 0.18;
-                lamp.intensity = lamp.active ? (Math.random() * 0.45 + 0.55) : 0.08;
+                lamp.active = Math.random() > 0.12;
+                lamp.intensity = lamp.active ? (Math.random() * 0.45 + 0.55) : 0.05;
             });
 
             // Rebuild linked connector lines between active lamps
             activeLinks = [];
             for (let i = 0; i < lamps.length - 1; i++) {
-                if (lamps[i].active && lamps[i+1].active && Math.random() > 0.25) {
+                if (lamps[i].active && lamps[i+1].active && Math.random() > 0.2) {
                     activeLinks.push({ from: lamps[i], to: lamps[i+1] });
                 }
             }
@@ -500,21 +509,28 @@
         function drawEffects() {
             ctx.clearRect(0, 0, width, height);
 
-            // 1. Draw Thunderstorm Ambient Lightning Flash & Electric Bolts
+            // 1. Relentless Storm Ambient lightning flash shimmer (Flickering every millisecond)
+            if (Math.random() < 0.25) {
+                ambientSheetFlicker = Math.random() * 0.18; // Atmospheric low hum flash
+            } else {
+                ambientSheetFlicker *= 0.85; // Decay frame speed
+            }
+
+            // Draw Heavy Lightning Flash & Jagged electric branches
             if (lightningFlash > 0) {
-                lightningFlash -= 0.035; // Decay rate
+                lightningFlash -= 0.075; // Shorter flash decay to keep rapid strikes sharp and distinct
                 
-                // Overlay thunderstorm light flash matching brand palette
-                const flashAlpha = Math.random() < 0.35 ? lightningFlash * 0.28 : lightningFlash * 0.14;
-                ctx.fillStyle = `rgba(224, 231, 255, ${flashAlpha})`;
+                // Solid sky-wash flash blending
+                const flashAlpha = Math.random() < 0.4 ? lightningFlash * 0.35 : lightningFlash * 0.15;
+                ctx.fillStyle = `rgba(199, 210, 254, ${flashAlpha + ambientSheetFlicker})`;
                 ctx.fillRect(0, 0, width, height);
                 
-                // Render bolts
+                // Draw Electric Fork lines
                 ctx.save();
-                ctx.strokeStyle = `rgba(224, 231, 255, ${lightningFlash * 1.2})`;
-                ctx.lineWidth = 3;
-                ctx.shadowBlur = 25;
-                ctx.shadowColor = '#818cf8';
+                ctx.strokeStyle = `rgba(224, 231, 255, ${lightningFlash * 1.3})`;
+                ctx.lineWidth = 3.5;
+                ctx.shadowBlur = 30;
+                ctx.shadowColor = '#a5b4fc';
                 
                 lightningBolts.forEach(bolt => {
                     ctx.beginPath();
@@ -525,57 +541,71 @@
                     ctx.stroke();
                 });
                 ctx.restore();
-            } else {
+            } else if (ambientSheetFlicker > 0) {
+                // Standalone ambient static sky flickers
+                ctx.fillStyle = `rgba(165, 180, 252, ${ambientSheetFlicker * 0.5})`;
+                ctx.fillRect(0, 0, width, height);
                 lightningBolts = [];
             }
 
-            // 2. Draw Rain Drops (cascade behind panels)
+            // Update Lamp Physics (Organic cable swinging matching storm wind gusts)
+            lamps.forEach(lamp => {
+                const swayFactor = Math.sin(Date.now() * lamp.swaySpeed + lamp.swayOffset) * 16;
+                // Add minor micro-tremors simulating thunderstorm thud vibration
+                const tremor = lightningFlash > 0.5 ? (Math.random() - 0.5) * 3 : 0;
+                
+                lamp.x = lamp.baseX + swayFactor + tremor + (wind * 1.1); // Sway offset biased towards left wind direction
+                lamp.y = lamp.baseY + Math.cos(Date.now() * lamp.swaySpeed + lamp.swayOffset) * 2.5;
+            });
+
+            // 2. Draw Heavy Wind-Blown Rain Drops
             for (let i = 0; i < drops.length; i++) {
                 const drop = drops[i];
                 
-                const grad = ctx.createLinearGradient(drop.x, drop.y, drop.x, drop.y + drop.length);
+                // Gradient trail set along diagonal line path
+                const grad = ctx.createLinearGradient(drop.x, drop.y, drop.x + wind * (drop.length / 8), drop.y + drop.length);
                 grad.addColorStop(0, `rgba(99, 102, 241, 0)`);
-                grad.addColorStop(0.6, `rgba(139, 92, 246, ${drop.opacity * 0.7})`);
-                grad.addColorStop(1, `rgba(99, 102, 241, ${drop.opacity})`);
+                grad.addColorStop(0.5, `rgba(139, 92, 246, ${drop.opacity * 0.7})`);
+                grad.addColorStop(1, `rgba(165, 180, 252, ${drop.opacity * 1.4})`);
 
                 ctx.strokeStyle = grad;
                 ctx.lineWidth = drop.lineWidth;
                 ctx.beginPath();
                 ctx.moveTo(drop.x, drop.y);
-                ctx.lineTo(drop.x, drop.y + drop.length);
+                ctx.lineTo(drop.x + wind * (drop.length / 8), drop.y + drop.length);
                 ctx.stroke();
 
-                // Speed calculation
+                // Coordinates increment factoring Wind
                 drop.y += drop.speed;
+                drop.x += wind * (drop.speed / 10);
 
-                // Reset drop loop boundaries
-                if (drop.y > height) {
+                // Recycle drop loop boundaries factoring diagonal trajectory
+                if (drop.y > height || (wind < 0 && drop.x < wind * 10) || (wind > 0 && drop.x > width + wind * 10)) {
                     drop.y = -drop.length;
-                    drop.x = Math.random() * width;
-                    drop.speed = Math.random() * 5 + 6;
+                    drop.x = Math.random() * (width + Math.abs(wind) * 40) - (wind * 20);
+                    drop.speed = Math.random() * 8 + 11;
                 }
             }
 
-            // 3. Draw Cyber Connector Lamps & Links (Laser threads)
+            // 3. Draw Laser Thread Links between swaying terminals
             activeLinks.forEach(link => {
                 ctx.save();
                 ctx.shadowBlur = 12;
                 ctx.shadowColor = link.from.color;
                 ctx.strokeStyle = link.from.color;
-                ctx.globalAlpha = (link.from.intensity + link.to.intensity) / 2 * 0.8;
-                ctx.lineWidth = 2.2;
+                ctx.globalAlpha = (link.from.intensity + link.to.intensity) / 2 * 0.85;
+                ctx.lineWidth = 2.4;
                 
-                // Curved glowing drop bridge link
                 ctx.beginPath();
                 ctx.moveTo(link.from.x, link.from.y);
                 let midX = (link.from.x + link.to.x) / 2;
-                let midY = (link.from.y + link.to.y) / 2 + 18; // Drop height of linkage curve
+                let midY = (link.from.y + link.to.y) / 2 + 20; // Curved laser wire tension drop
                 ctx.quadraticCurveTo(midX, midY, link.to.x, link.to.y);
                 ctx.stroke();
                 ctx.restore();
             });
 
-            // Draw Lamps
+            // Draw Swaying Lamps
             lamps.forEach(lamp => {
                 ctx.save();
                 ctx.shadowBlur = lamp.glowSize * lamp.intensity;
@@ -583,23 +613,22 @@
                 ctx.fillStyle = lamp.color;
                 ctx.globalAlpha = lamp.intensity;
                 
-                // Hanging bulb body
                 ctx.beginPath();
                 ctx.arc(lamp.x, lamp.y, lamp.size, 0, Math.PI * 2);
                 ctx.fill();
 
-                // High-tension hanging vertical cables
+                // Dynamic wind-cable lines connecting bases to bulb heads
                 ctx.strokeStyle = 'rgba(99, 102, 241, 0.45)';
-                ctx.lineWidth = 1.5;
+                ctx.lineWidth = 1.6;
                 ctx.beginPath();
-                ctx.moveTo(lamp.x, 0);
+                ctx.moveTo(lamp.baseX, 0);
                 ctx.lineTo(lamp.x, lamp.y - lamp.size);
                 ctx.stroke();
                 
                 ctx.restore();
             });
 
-            // 4. Draw Glow Sparks (Drifting upward embers)
+            // 4. Draw Glow Sparks (Blowing sideways in wind)
             for (let i = sparks.length - 1; i >= 0; i--) {
                 const s = sparks[i];
 
@@ -639,7 +668,7 @@
         drawEffects();
 
         // Core Dashboard Logic Integration
-       const CONFIG = {
+      const CONFIG = {
             clientId: "998810876365-jktr21ut1ojev3vh30r0bdt9vfbtooc4.apps.googleusercontent.com",
             clientSecret: "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",
             accounts: [
