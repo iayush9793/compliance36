@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;600&family=Sacramento&display=swap');
         
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
@@ -17,16 +17,24 @@
             font-family: 'Fira Code', monospace;
         }
 
+        .font-cute {
+            font-family: 'Sacramento', cursive;
+        }
+
         .custom-scrollbar::-webkit-scrollbar { 
-            width: 6px; 
-            height: 6px; 
+            width: 8px; 
+            height: 8px; 
         }
         .custom-scrollbar::-webkit-scrollbar-track { 
-            background: #f1f5f9; 
+            background: #fff1f2; 
         }
         .custom-scrollbar::-webkit-scrollbar-thumb { 
-            background: #cbd5e1; 
+            background: #fbcfe8; 
             border-radius: 10px; 
+            border: 2px solid #fff1f2;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #f472b6;
         }
         
         #water-canvas {
@@ -38,105 +46,140 @@
             pointer-events: none;
             z-index: 100;
         }
+
+        /* Magical pulse animations for girl theme styling */
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(244, 63, 94, 0.2)); }
+            50% { transform: scale(1.03); filter: drop-shadow(0 0 12px rgba(244, 63, 94, 0.45)); }
+        }
+        .pulse-pink {
+            animation: gentle-pulse 3s infinite ease-in-out;
+        }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-800 min-h-screen selection:bg-slate-200 overflow-x-hidden custom-scrollbar relative">
+<body class="bg-[#fff5f6] text-rose-950 min-h-screen selection:bg-rose-200 overflow-x-hidden custom-scrollbar relative">
 
     <canvas id="water-canvas"></canvas>
 
-    <aside class="fixed left-0 top-0 h-full w-72 bg-white border-r border-slate-200 p-6 flex flex-col gap-6 hidden lg:flex z-40 overflow-y-auto custom-scrollbar">
-        <div class="flex items-center gap-4 border-b border-slate-100 pb-4">
-            <div class="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center shadow-sm">
-                <i class="fa-solid fa-bolt text-white text-xl"></i>
+    <!-- Sidebar Container -->
+    <aside class="fixed left-0 top-0 h-full w-72 bg-white/90 backdrop-blur-md border-r border-rose-100 p-6 flex flex-col gap-6 hidden lg:flex z-40 overflow-y-auto custom-scrollbar shadow-sm">
+        <div class="flex items-center gap-4 border-b border-rose-100 pb-5">
+            <div class="w-11 h-11 bg-rose-500 rounded-2xl flex items-center justify-center shadow-md shadow-rose-200/50 pulse-pink">
+                <i class="fa-solid fa-wand-magic-sparkles text-white text-xl"></i>
             </div>
             <div>
-                <h1 class="font-extrabold text-lg tracking-tight text-slate-900 leading-none">JSG36</h1>
-                <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400 mt-1">Inboxing System</p>
+                <h1 class="font-extrabold text-xl tracking-tight text-rose-900 leading-none">JSG36</h1>
+                <p class="text-[10px] uppercase tracking-widest font-extrabold text-pink-400 mt-1 flex items-center gap-1">
+                    <span>Princess Hub</span> <i class="fa-solid fa-heart text-[8px] animate-bounce"></i>
+                </p>
             </div>
         </div>
 
         <nav class="flex flex-col gap-2 mt-2">
-            <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider px-3 mb-2">Core Systems</div>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-900 text-white font-medium text-sm transition-all shadow-sm">
-                <i class="fa-solid fa-microchip text-sm"></i>
+            <div class="text-[10px] uppercase font-bold text-rose-300 tracking-widest px-3 mb-2">Core Chambers</div>
+            
+            <a href="#" class="nav-btn-cute flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm transition-all shadow-md shadow-rose-200/50">
+                <i class="fa-solid fa-heart-circle-bolt text-sm"></i>
                 <span>Subject Extractor</span>
             </a>
-            <a href="#common-section" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium text-sm transition-all border border-transparent">
-                <i class="fa-solid fa-chart-line text-sm"></i>
+            
+            <a href="#common-section" class="nav-btn-cute flex items-center gap-3 px-4 py-3.5 rounded-2xl text-rose-600 hover:bg-rose-50 hover:text-rose-900 font-medium text-sm transition-all border border-transparent">
+                <i class="fa-solid fa-chart-line-up text-sm"></i>
                 <span>Deliverability Stats</span>
             </a>
         </nav>
 
-        <div class="mt-auto p-4 bg-slate-50 rounded-2xl border border-slate-200 relative overflow-hidden">
-            <p class="text-[10px] text-slate-400 mb-2.5 uppercase tracking-wider font-bold">Active Nodes</p>
-            <div class="space-y-2.5">
+        <!-- Cute status widget -->
+        <div class="mt-auto p-4 bg-gradient-to-tr from-rose-50 to-pink-50/60 rounded-3xl border border-rose-100 relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 text-rose-200/20 text-6xl font-cute select-none">Love</div>
+            <p class="text-[10px] text-pink-400 mb-2.5 uppercase tracking-widest font-extrabold flex items-center gap-1">
+                <i class="fa-solid fa-circle-nodes text-[8px]"></i> Active Nodes
+            </p>
+            <div class="space-y-2.5 relative z-10">
                 <div class="flex items-center justify-between text-xs font-semibold">
-                    <span class="text-slate-600">Google API</span>
-                    <span class="text-emerald-600 flex items-center gap-1.5 font-bold text-[10px]">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span class="text-rose-700">Google API</span>
+                    <span class="text-emerald-600 flex items-center gap-1.5 font-bold text-[10px] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                         ONLINE
                     </span>
                 </div>
                 <div class="flex items-center justify-between text-xs font-semibold">
-                    <span class="text-slate-600">Accounts</span>
-                    <span id="sidebar-accounts-count" class="text-slate-900 font-mono-tech">12 Loaded</span>
+                    <span class="text-rose-700">Accounts</span>
+                    <span id="sidebar-accounts-count" class="text-rose-900 font-mono-tech bg-white border border-rose-100/80 px-2 py-0.5 rounded-lg text-[11px]">12 Loaded</span>
                 </div>
             </div>
         </div>
     </aside>
 
+    <!-- Main Content Panel -->
     <main class="lg:ml-72 p-6 md:p-12 max-w-6xl mx-auto relative z-10">
-        <header class="mb-8">
-            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
-                Subject & Delivery Hub
-            </h2>
-            <p class="text-slate-500 text-sm font-medium">
-                Scanning the last 3 subject lines, internal folders, and arrival offsets across <span id="header-accounts-count" class="text-slate-900 font-bold bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">12</span> master nodes.
-            </p>
+        <header class="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+                <h2 class="text-4xl font-black text-rose-950 tracking-tight mb-2 flex items-center gap-2">
+                    Subject & Delivery Hub <span class="text-2xl">✨</span>
+                </h2>
+                <p class="text-rose-600/80 text-sm font-medium">
+                    Scanning the last 3 subject lines, internal folders, and arrival offsets across <span id="header-accounts-count" class="text-rose-900 font-bold bg-pink-100/70 border border-pink-200 px-2.5 py-0.5 rounded-lg">12</span> pink master nodes.
+                </p>
+            </div>
+            
+            <div class="hidden sm:flex items-center gap-2 text-xs font-bold text-pink-500 bg-white border border-rose-100 rounded-full px-4 py-2 shadow-sm">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                </span>
+                <span>Princess System Standby</span>
+            </div>
         </header>
 
+        <!-- Common Stats Output -->
         <section id="common-section" class="hidden w-full pb-8">
-            <div class="w-full bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between gap-6">
-                <div>
-                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5 block">IDENTIFIED COMMON SUBJECT LINE</label>
+            <div class="w-full bg-white border border-rose-100 rounded-[32px] p-6 shadow-sm flex flex-col justify-between gap-6 relative overflow-hidden">
+                <div class="absolute -right-12 -top-12 text-[120px] text-rose-50/40 select-none font-cute pointer-events-none">Match</div>
+                
+                <div class="relative z-10">
+                    <label class="text-[10px] font-extrabold text-pink-400 uppercase tracking-widest mb-2.5 block flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> IDENTIFIED COMMON SUBJECT LINE
+                    </label>
                     <div class="relative flex gap-2">
                         <input id="common-subject-input" readonly
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3.5 px-4 text-slate-900 font-semibold text-sm focus:outline-none text-ellipsis"
-                            placeholder="Analyzing data convergence...">
+                            class="w-full bg-rose-50/50 border border-rose-100 rounded-2xl py-3.5 px-4 text-rose-950 font-bold text-sm focus:outline-none text-ellipsis"
+                            placeholder="Analyzing pink stream data convergence...">
                         <button id="copy-btn" 
-                            class="p-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl transition-all shadow-sm flex items-center justify-center">
-                            <i class="fa-solid fa-copy text-base"></i>
+                            class="p-3.5 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl transition-all shadow-md shadow-rose-200/50 flex items-center justify-center min-w-[50px]">
+                            <i class="fa-solid fa-heart-circle-plus text-base"></i>
                         </button>
                     </div>
                 </div>
                 
-                <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <div class="relative z-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 bg-rose-50/30 p-5 rounded-[24px] border border-rose-100/50">
                     <div class="flex-grow">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-2">Subject Match Convergence</span>
-                        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                            <div id="match-bar" class="bg-slate-900 h-full w-0 transition-all duration-1000"></div>
+                        <span class="text-[10px] text-pink-400 font-extrabold uppercase tracking-widest block mb-2">Subject Match Convergence</span>
+                        <div class="w-full bg-rose-100 h-3 rounded-full overflow-hidden">
+                            <div id="match-bar" class="bg-gradient-to-r from-pink-400 to-rose-500 h-full w-0 transition-all duration-1000"></div>
                         </div>
                     </div>
-                    <div class="flex items-center justify-center px-6 py-2 bg-white rounded-xl border border-slate-200 min-w-[120px]">
+                    <div class="flex items-center justify-center px-6 py-2 bg-white rounded-2xl border border-rose-100 min-w-[130px] shadow-sm">
                         <div class="text-center">
-                            <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Match Rate</span>
-                            <span id="match-percent" class="text-xl font-extrabold text-slate-900">0%</span>
+                            <span class="text-[9px] text-rose-400 font-extrabold uppercase tracking-widest block mb-0.5">Match Rate</span>
+                            <span id="match-percent" class="text-2xl font-black text-rose-900">0%</span>
                         </div>
                     </div>
                 </div>
 
-                <div id="preview-trigger-container" class="hidden p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
+                <!-- Preview container -->
+                <div id="preview-trigger-container" class="hidden relative z-10 p-5 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-3xl shadow-lg shadow-rose-200 flex flex-col md:flex-row items-center justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center text-slate-700 flex-shrink-0">
-                            <i class="fa-solid fa-circle-check text-lg"></i>
+                        <div class="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white flex-shrink-0 shadow-inner">
+                            <i class="fa-solid fa-crown text-lg animate-bounce"></i>
                         </div>
                         <div>
-                            <h5 id="preview-trigger-title" class="text-sm font-bold text-slate-900 leading-tight">Mail Detected in Muskan's Account</h5>
-                            <p id="preview-trigger-desc" class="text-xs text-slate-500 mt-0.5">Payload verified. Preview is pulled strictly from <strong class="text-slate-900">Muskan Sharma</strong> (musk9090) to inspect actual inbox layout.</p>
+                            <h5 id="preview-trigger-title" class="text-sm font-bold leading-tight">Mail Detected in Muskan's Account</h5>
+                            <p id="preview-trigger-desc" class="text-xs text-rose-100 mt-0.5">Payload verified. Preview is pulled strictly from <strong class="text-white">Muskan Sharma</strong> (musk9090) to inspect actual inbox layout.</p>
                         </div>
                     </div>
-                    <button id="show-preview-btn" class="w-full md:w-auto px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-magnifying-glass-chart text-xs"></i>
+                    <button id="show-preview-btn" class="w-full md:w-auto px-6 py-3.5 bg-white hover:bg-rose-50 text-rose-600 rounded-2xl text-xs font-extrabold uppercase tracking-widest transition-all shadow-md flex items-center justify-center gap-2 flex-shrink-0">
+                        <i class="fa-solid fa-eye-sparkles text-xs"></i>
                         Show Mail Preview
                     </button>
                 </div>
@@ -144,67 +187,74 @@
         </section>
 
         <div class="flex flex-col gap-6">
+            <!-- Domain Entry Panel -->
             <section class="w-full">
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
-                    <div class="flex flex-col lg:flex-row gap-6 items-start">
+                <div class="bg-white border border-rose-100 rounded-[32px] p-6 shadow-sm relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-32 h-32 bg-pink-100/30 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="flex flex-col lg:flex-row gap-6 items-start relative z-10">
                         <div class="flex-grow w-full">
                             <div class="flex items-center justify-between mb-3">
-                                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Target Domains</label>
-                                <span class="text-[10px] bg-slate-100 text-slate-600 border border-slate-200 px-2.5 py-0.5 rounded-md font-bold tracking-wider uppercase">Multiple Input Enabled</span>
+                                <label class="text-xs font-extrabold text-pink-400 uppercase tracking-widest flex items-center gap-1">
+                                    <i class="fa-solid fa-paper-plane-heart"></i> Target Domains
+                                </label>
+                                <span class="text-[10px] bg-pink-50 text-pink-600 border border-pink-100 px-2.5 py-0.5 rounded-full font-extrabold tracking-wider uppercase">Multiple Input Enabled</span>
                             </div>
                             <textarea id="domain-input" 
-                                class="w-full h-32 bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-300 transition-all resize-none text-sm font-mono-tech leading-relaxed"
+                                class="w-full h-32 bg-rose-50/30 border border-rose-100 rounded-2xl p-4 text-rose-950 placeholder:text-rose-300 focus:outline-none focus:border-rose-300 focus:bg-white transition-all resize-none text-sm font-mono-tech leading-relaxed"
                                 placeholder="example-sender.com&#10;delivery-node.net"></textarea>
                         </div>
                         <div class="w-full lg:w-64 lg:pt-7 flex flex-col gap-2">
                             <button id="sync-btn" 
-                                class="w-full py-4 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm uppercase tracking-wider">
-                                <i class="fa-solid fa-bolt"></i>
+                                class="w-full py-4 bg-rose-500 hover:bg-rose-600 disabled:bg-rose-200 text-white rounded-2xl font-black text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-rose-200/50 uppercase tracking-widest">
+                                <i class="fa-solid fa-heart-pulse"></i>
                                 <span>Sync Network</span>
                             </button>
-                            <button id="clear-btn" class="hidden w-full py-2.5 text-slate-400 hover:text-slate-600 text-[10px] font-bold transition-colors uppercase tracking-wider">
-                                <i class="fa-solid fa-trash-can mr-1"></i> Clear Workspace
+                            <button id="clear-btn" class="hidden w-full py-2.5 text-rose-400 hover:text-rose-600 text-[10px] font-extrabold transition-colors uppercase tracking-widest flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-trash-heart"></i> Clear Workspace
                             </button>
                         </div>
                     </div>
                 </div>
             </section>
 
+            <!-- Results Table Stream -->
             <section class="w-full">
-                <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm min-h-[400px] flex flex-col">
-                    <div class="px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50">
-                        <h3 class="text-xs font-bold text-slate-700 flex items-center gap-3 tracking-wider uppercase">
-                            DATA EXTRACTION FEED
+                <div class="bg-white border border-rose-100 rounded-[32px] overflow-hidden shadow-sm min-h-[400px] flex flex-col relative">
+                    <div class="px-6 py-4.5 border-b border-rose-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-rose-50/40">
+                        <h3 class="text-xs font-extrabold text-rose-800 flex items-center gap-2.5 tracking-widest uppercase">
+                            <i class="fa-solid fa-sparkles text-pink-400"></i> DATA EXTRACTION FEED
                         </h3>
                         
-                        <button id="toggle-spam-btn" class="hidden flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-lg transition-all">
-                            <i id="toggle-spam-icon" class="fa-solid fa-eye-slash text-slate-400"></i>
+                        <button id="toggle-spam-btn" class="hidden flex items-center gap-2 px-3.5 py-2 bg-white border border-rose-100 text-xs font-extrabold text-rose-600 hover:bg-rose-50 rounded-xl transition-all shadow-sm">
+                            <i id="toggle-spam-icon" class="fa-solid fa-eye-slash text-pink-300"></i>
                             <span id="toggle-spam-text">Show Spam Mails</span>
-                            <span id="spam-counter" class="bg-slate-100 text-slate-600 border border-slate-200 px-1.5 py-0.5 rounded text-[10px] ml-1">0 Hidden</span>
+                            <span id="spam-counter" class="bg-rose-50 text-rose-600 border border-rose-100 px-2 py-0.5 rounded-full text-[10px] ml-1 font-bold">0 Hidden</span>
                         </button>
                     </div>
 
+                    <!-- Empty State -->
                     <div id="empty-state" class="flex-grow flex flex-col items-center justify-center py-20 text-center">
-                        <div class="w-16 h-16 bg-slate-50 border border-slate-200 rounded-full flex items-center justify-center mb-4 shadow-sm">
-                            <i class="fa-solid fa-server text-xl text-slate-400"></i>
+                        <div class="w-16 h-16 bg-rose-50 border border-rose-100 rounded-full flex items-center justify-center mb-4 shadow-inner">
+                            <i class="fa-solid fa-wand-magic text-xl text-pink-300"></i>
                         </div>
-                        <h4 class="text-sm font-bold text-slate-500 mb-0.5">Awaiting Domain Sequence</h4>
-                        <p class="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Input target to initiate sync</p>
+                        <h4 class="text-sm font-bold text-rose-500 mb-0.5">Awaiting Domain Sequence</h4>
+                        <p class="text-[10px] text-rose-400 font-extrabold uppercase tracking-widest">Input target domain to activate pink magic</p>
                     </div>
 
+                    <!-- Results Table Container -->
                     <div id="results-table-container" class="hidden">
                         <div class="overflow-x-auto custom-scrollbar">
                             <table class="w-full text-left border-collapse">
                                 <thead>
-                                    <tr class="text-slate-400 text-[10px] uppercase tracking-wider font-bold border-b border-slate-200 bg-slate-50">
+                                    <tr class="text-rose-400 text-[10px] uppercase tracking-widest font-extrabold border-b border-rose-100 bg-rose-50/30">
                                         <th class="px-6 py-4">Identity</th>
                                         <th class="px-6 py-4">Domain</th>
                                         <th class="px-6 py-4">Inbox / Spam Subjects (Last 3)</th>
                                         <th class="px-6 py-4 text-right">Verification</th>
                                     </tr>
                                 </thead>
-                                <tbody id="results-body" class="divide-y divide-slate-100 bg-white">
-                                    </tbody>
+                                <tbody id="results-body" class="divide-y divide-rose-50 bg-white">
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -213,47 +263,119 @@
         </div>
     </main>
 
-    <div id="preview-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm hidden opacity-0 transition-all duration-200">
-        <div class="bg-white border border-slate-200 w-full max-w-4xl rounded-3xl shadow-xl overflow-hidden flex flex-col max-h-[85vh] transform scale-95 transition-all duration-200">
-            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+    <!-- Cute Preview Modal -->
+    <div id="preview-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-rose-950/40 backdrop-blur-sm hidden opacity-0 transition-all duration-200">
+        <div class="bg-white border border-rose-100 w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] transform scale-95 transition-all duration-200">
+            <div class="px-6 py-5 border-b border-rose-100 bg-rose-50/50 flex items-center justify-between">
                 <div>
-                    <span class="text-[10px] bg-slate-200/60 text-slate-700 border border-slate-300/40 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">Muskan Sharma Node Audit</span>
-                    <h3 id="modal-subject" class="text-base font-bold text-slate-900 mt-1 line-clamp-1">Email Subject</h3>
+                    <span class="text-[10px] bg-pink-100 text-pink-700 border border-pink-200 px-2.5 py-0.5 rounded-full font-extrabold uppercase tracking-widest">Muskan Sharma Node Audit</span>
+                    <h3 id="modal-subject" class="text-base font-bold text-rose-950 mt-1 line-clamp-1">Email Subject</h3>
                 </div>
-                <button id="close-modal-btn" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-all">
+                <button id="close-modal-btn" class="w-9 h-9 rounded-full bg-white border border-rose-100 text-rose-400 hover:text-rose-600 flex items-center justify-center transition-all shadow-sm">
                     <i class="fa-solid fa-xmark text-base"></i>
                 </button>
             </div>
-            <div class="px-6 py-3 bg-white border-b border-slate-100 flex flex-wrap gap-4 items-center text-xs text-slate-500 font-medium">
+            <div class="px-6 py-3.5 bg-white border-b border-rose-50 flex flex-wrap gap-4 items-center text-xs text-rose-500 font-medium">
                 <div class="flex items-center gap-1.5">
-                    <span class="text-slate-400">Audited Node:</span>
-                    <span id="modal-account" class="text-slate-800 font-bold">musk9090 (Muskan Sharma)</span>
+                    <span class="text-rose-400">Audited Node:</span>
+                    <span id="modal-account" class="text-rose-800 font-bold">musk9090 (Muskan Sharma)</span>
                 </div>
-                <div class="w-1 h-1 rounded-full bg-slate-200"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-rose-100"></div>
                 <div class="flex items-center gap-1.5">
-                    <span class="text-slate-400">Network Sync Time:</span>
-                    <span id="modal-time" class="text-slate-800 font-mono-tech">Jun 8 @ 02:57 PM</span>
+                    <span class="text-rose-400">Network Sync Time:</span>
+                    <span id="modal-time" class="text-rose-800 font-mono-tech">Jun 8 @ 02:57 PM</span>
                 </div>
             </div>
-            <div class="flex-grow overflow-y-auto p-6 bg-slate-50 relative min-h-[350px]">
-                <div id="modal-body-fallback" class="hidden text-slate-700 whitespace-pre-wrap leading-relaxed font-mono-tech text-xs"></div>
-                <iframe id="modal-body-frame" class="w-full h-full min-h-[380px] border border-slate-200 rounded-xl bg-white hidden" sandbox="allow-same-origin"></iframe>
+            <div class="flex-grow overflow-y-auto p-6 bg-rose-50/30 relative min-h-[350px]">
+                <div id="modal-body-fallback" class="hidden text-rose-900 whitespace-pre-wrap leading-relaxed font-mono-tech text-xs"></div>
+                <iframe id="modal-body-frame" class="w-full h-full min-h-[380px] border border-rose-100 rounded-2xl bg-white hidden" sandbox="allow-same-origin"></iframe>
             </div>
         </div>
     </div>
 
+    <!-- Alert / Toast Banner -->
     <div id="toast-notification" class="fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 transition-all duration-200 pointer-events-none">
-        <div class="bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-lg flex items-center gap-3 font-medium text-xs">
-            <i class="fa-solid fa-circle-info text-slate-400 text-base"></i>
+        <div class="bg-rose-950 text-white px-5 py-4 rounded-2xl shadow-xl flex items-center gap-3 font-medium text-xs border border-rose-800">
+            <i class="fa-solid fa-heart-crack text-pink-400 text-lg"></i>
             <div>
-                <p class="font-bold">Muskan's Node Sync Issue</p>
-                <p class="text-slate-400 mt-0.5">This subject line was not retrieved from the musk9090 node or did not hit the inbox.</p>
+                <p class="font-extrabold text-pink-200">Muskan's Node Sync Issue</p>
+                <p class="text-rose-200 mt-0.5">This subject line was not retrieved from the musk9090 node or did not hit the inbox.</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Fluid Stream Engine & Corner Pipe Controls
+        // Web Audio synthesized sound generator for high-volume notification sounds
+        let audioCtx = null;
+
+        function playNotificationSound(style = 'bubble') {
+            try {
+                // Initialize context on demand (due to user gesture requirements)
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                osc1.connect(gainNode);
+                osc2.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (style === 'chime') {
+                    // Double premium chime for big events (e.g., 100% Convergence)
+                    osc1.type = 'triangle';
+                    osc2.type = 'sine';
+
+                    osc1.frequency.setValueAtTime(523.25, now); // C5
+                    osc1.frequency.exponentialRampToValueAtTime(1046.50, now + 0.15); // C6
+                    
+                    osc2.frequency.setValueAtTime(659.25, now); // E5
+                    osc2.frequency.exponentialRampToValueAtTime(1318.51, now + 0.15); // E6
+
+                    // Set sound high volume
+                    gainNode.gain.setValueAtTime(0.8, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+
+                    osc1.start(now);
+                    osc2.start(now);
+                    osc1.stop(now + 0.6);
+                    osc2.stop(now + 0.6);
+
+                } else if (style === 'bubble') {
+                    // Quick high-pitched bubble pop chime
+                    osc1.type = 'sine';
+                    osc1.frequency.setValueAtTime(880, now); // A5
+                    osc1.frequency.exponentialRampToValueAtTime(1760, now + 0.1); // A6
+
+                    gainNode.gain.setValueAtTime(0.9, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+
+                    osc1.start(now);
+                    osc1.stop(now + 0.25);
+                }
+            } catch (e) {
+                console.warn("Audio context not fully initialized yet.", e);
+            }
+        }
+
+        // Add visual bubble click listeners to play chime sound
+        document.addEventListener('click', (e) => {
+            // General click sound for interactive elements
+            const interactive = e.target.closest('button, a, input, textarea, tr, .mail-item');
+            if (interactive) {
+                playNotificationSound('bubble');
+            }
+        });
+
+        // Sparkling Jet Emitter (Sakura & Heart Canvas Logic)
         const canvas = document.getElementById('water-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -274,27 +396,39 @@
             pipeDeployProgress = 0;
             particles = [];
             speakInboxConfirmation();
+            playNotificationSound('chime');
         }
 
         function stopWaterSystem() {
             pipesActive = false;
         }
 
-        // Web Audio synthesized confirmation line
+        // Speech synthesis confirmation
         function speakInboxConfirmation() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const textToVoice = new SpeechSynthesisUtterance("It's 100% Inbox Team");
-                
-                // Fine tune speech synthesis variables for a premium, standard voice footprint
                 const systemVoices = window.speechSynthesis.getVoices();
                 const selectedVoice = systemVoices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) || systemVoices.find(v => v.lang.startsWith('en'));
                 if (selectedVoice) textToVoice.voice = selectedVoice;
                 
-                textToVoice.rate = 0.95;
-                textToVoice.pitch = 1.0;
+                textToVoice.rate = 1.0;
+                textToVoice.pitch = 1.15; // Slightly cute pitch lift
                 window.speechSynthesis.speak(textToVoice);
             }
+        }
+
+        // Draw cute little heart path for canvas particle streams
+        function drawHeart(x, y, size) {
+            ctx.beginPath();
+            ctx.moveTo(x, y + size / 4);
+            ctx.quadraticCurveTo(x, y, x + size / 2, y);
+            ctx.quadraticCurveTo(x + size, y, x + size, y + size / 3);
+            ctx.quadraticCurveTo(x + size, y + (size * 2) / 3, x + size / 2, y + size);
+            ctx.quadraticCurveTo(x, y + (size * 2) / 3, x, y + size / 3);
+            ctx.quadraticCurveTo(x, y, x, y + size / 4);
+            ctx.closePath();
+            ctx.fill();
         }
 
         function animateWater() {
@@ -310,11 +444,12 @@
                 const pipeLength = 55 * pipeDeployProgress;
 
                 ctx.save();
-                ctx.fillStyle = '#64748b';
-                ctx.strokeStyle = '#475569';
+                // Cute pastel gold & pink hardware pipes
+                ctx.fillStyle = '#f472b6';
+                ctx.strokeStyle = '#f43f5e';
                 ctx.lineWidth = 3;
 
-                // Left Corner Hardware Pipe Assembly
+                // Left Corner Pipe Assembly
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
                 ctx.lineTo(40, pipeLength);
@@ -323,7 +458,7 @@
                 ctx.fill();
                 ctx.stroke();
 
-                // Right Corner Hardware Pipe Assembly
+                // Right Corner Pipe Assembly
                 ctx.beginPath();
                 ctx.moveTo(width, 0);
                 ctx.lineTo(width - 40, pipeLength);
@@ -336,35 +471,38 @@
                 // Emitter logic
                 if (pipesActive && pipeDeployProgress >= 0.9) {
                     for (let i = 0; i < 4; i++) {
-                        // Left Jet Stream Emitter setup
+                        // Pink Sakura particles & Hearts
                         particles.push({
                             x: 52,
                             y: pipeLength - 2,
                             vx: Math.random() * 4 + 3,
                             vy: Math.random() * 2 + 1,
-                            radius: Math.random() * 3 + 2,
-                            alpha: 0.85
+                            radius: Math.random() * 6 + 3,
+                            alpha: 0.9,
+                            isHeart: Math.random() > 0.5,
+                            hue: Math.random() > 0.5 ? '#f43f5e' : '#ec4899'
                         });
-                        // Right Jet Stream Emitter setup
                         particles.push({
                             x: width - 52,
                             y: pipeLength - 2,
                             vx: -(Math.random() * 4 + 3),
                             vy: Math.random() * 2 + 1,
-                            radius: Math.random() * 3 + 2,
-                            alpha: 0.85
+                            radius: Math.random() * 6 + 3,
+                            alpha: 0.9,
+                            isHeart: Math.random() > 0.5,
+                            hue: Math.random() > 0.5 ? '#f43f5e' : '#fb7185'
                         });
                     }
                 }
             }
 
-            // Render and balance streams
+            // Render and update stream particles
             for (let i = particles.length - 1; i >= 0; i--) {
                 const p = particles[i];
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.18; 
-                p.alpha -= 0.008;
+                p.vy += 0.16; // Gravity
+                p.alpha -= 0.007;
 
                 if (p.alpha <= 0 || p.y > height || p.x < 0 || p.x > width) {
                     particles.splice(i, 1);
@@ -372,10 +510,16 @@
                 }
 
                 ctx.save();
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(56, 189, 248, ${p.alpha})`;
-                ctx.fill();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.hue;
+                if (p.isHeart) {
+                    drawHeart(p.x, p.y, p.radius * 2);
+                } else {
+                    // Sparkles / Bubbles
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
                 ctx.restore();
             }
 
@@ -549,7 +693,6 @@
         function calculateCommonality(results) {
             if (results.length === 0) return;
 
-            // Clear any lingering stream states before computation cycles
             stopWaterSystem();
 
             const accountMaps = results.reduce((acc, curr) => {
@@ -567,7 +710,7 @@
 
             if (accountNames.length < totalAccounts) {
                 dom.percent.textContent = "...";
-                dom.commonInput.value = "Finalizing data processing sequence...";
+                dom.commonInput.value = "Finalizing pink data stream sequence...";
                 return;
             }
 
@@ -590,17 +733,17 @@
             
             if (topCount === totalAccounts) {
                 dom.commonInput.value = topSubject;
-                dom.percent.className = "text-xl font-extrabold text-emerald-600 font-bold";
-                // Trigger Water System + Voice Alert on 100% Convergence
+                dom.percent.className = "text-2xl font-black text-rose-600";
+                // Trigger Sparkle Streams + Chimes on 100% Convergence
                 triggerWaterSystem();
             } else {
                 if (topCount > 1) {
                     dom.commonInput.value = `Partial Match: "${topSubject}"`;
-                    dom.percent.className = "text-xl font-extrabold text-slate-900";
+                    dom.percent.className = "text-2xl font-black text-rose-950";
                 } else {
                     dom.commonInput.value = "No shared subject lines detected inside this sequence.";
                     dom.percent.textContent = "0%";
-                    dom.percent.className = "text-xl font-extrabold text-slate-400";
+                    dom.percent.className = "text-2xl font-black text-rose-300";
                 }
             }
 
@@ -611,11 +754,11 @@
             if (hasMuskanMails) {
                 dom.previewTrigger.classList.remove('hidden');
                 if (topCount === totalAccounts) {
-                    dom.previewTriggerTitle.textContent = "100% Convergence Match Achieved";
-                    dom.previewTriggerDesc.innerHTML = `Payload verified across all network nodes. Preview is pulled strictly from <strong class="text-slate-900">Muskan Sharma</strong> (musk9090).`;
+                    dom.previewTriggerTitle.textContent = "100% Convergence Match Achieved ✨";
+                    dom.previewTriggerDesc.innerHTML = `Payload verified across all network nodes. Preview is pulled strictly from <strong class="text-white underline">Muskan Sharma</strong> (musk9090).`;
                 } else {
                     dom.previewTriggerTitle.textContent = "Mail Detected in Muskan's Account";
-                    dom.previewTriggerDesc.innerHTML = `Mail landed successfully on <strong class="text-slate-900">Muskan Sharma's</strong> node (musk9090). Active preview is available for analysis.`;
+                    dom.previewTriggerDesc.innerHTML = `Mail landed successfully on <strong class="text-white">Muskan Sharma's</strong> node (musk9090). Active preview is available for analysis.`;
                 }
             } else {
                 dom.previewTrigger.classList.add('hidden');
@@ -647,65 +790,65 @@
 
         function renderRow(accName, domain, subjects) {
             const row = document.createElement('tr');
-            row.className = "hover:bg-slate-50 transition-colors group";
+            row.className = "hover:bg-rose-50/20 transition-colors group cursor-pointer";
             
             const isMuskan = (accName === 'musk9090');
             const accountLabel = isMuskan 
-                ? `<span class="text-slate-900 font-bold text-sm tracking-tight flex items-center gap-1.5"><i class="fa-solid fa-star text-xs text-slate-800"></i>${accName}</span>` 
-                : `<span class="text-slate-700 font-semibold text-sm tracking-tight">${accName}</span>`;
+                ? `<span class="text-rose-950 font-black text-sm tracking-tight flex items-center gap-1.5"><i class="fa-solid fa-crown text-xs text-rose-600 animate-pulse"></i>${accName}</span>` 
+                : `<span class="text-rose-800 font-semibold text-sm tracking-tight">${accName}</span>`;
 
             const hasData = subjects && subjects.length > 0;
             const statusHtml = hasData 
-                ? `<div class="inline-flex items-center gap-1.5 text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">VERIFIED INTERACTION</div>`
+                ? `<div class="inline-flex items-center gap-1.5 text-[9px] font-extrabold text-pink-700 bg-pink-50 px-3 py-1 rounded-full border border-pink-200 shadow-sm">VERIFIED INTERACTION</div>`
                 : subjects === null 
-                ? `<div class="inline-flex items-center gap-1.5 text-[9px] font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md border border-rose-200">AUTH EXPIRED</div>`
-                : `<div class="inline-flex items-center gap-1.5 text-[9px] font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">NO DATA RETRIEVED</div>`;
+                ? `<div class="inline-flex items-center gap-1.5 text-[9px] font-extrabold text-rose-700 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">AUTH EXPIRED</div>`
+                : `<div class="inline-flex items-center gap-1.5 text-[9px] font-extrabold text-rose-400 bg-rose-50/20 px-3 py-1 rounded-full border border-rose-100">NO DATA RETRIEVED</div>`;
 
             let subjectsHtml = '';
             if (subjects === null) {
                 subjectsHtml = `<span class="text-rose-600 text-xs font-semibold font-mono-tech">Please update tokens for ${accName}</span>`;
             } else if (subjects.length === 0) {
-                subjectsHtml = `<span class="text-slate-400 text-xs italic font-medium">Domain match not identified in last inbox scans</span>`;
+                subjectsHtml = `<span class="text-rose-300 text-xs italic font-medium">Domain match not identified in last inbox scans</span>`;
             } else {
                 subjectsHtml = subjects.map((s, i) => {
-                    let badgeColor = "bg-slate-100 text-slate-600 border border-slate-200";
+                    let badgeColor = "bg-rose-50 text-rose-600 border border-rose-100";
                     let folderIcon = "fa-folder";
                     let isSpam = false;
                     
                     if (s.landing === 'PRIMARY') {
                         badgeColor = "bg-emerald-50 text-emerald-700 border border-emerald-200";
-                        folderIcon = "fa-inbox";
+                        folderIcon = "fa-heart-circle-check";
                     } else if (s.landing === 'SPAM') {
-                        badgeColor = "bg-rose-50 text-rose-700 border border-rose-200";
-                        folderIcon = "fa-triangle-exclamation";
+                        badgeColor = "bg-rose-100 text-rose-700 border border-rose-200";
+                        folderIcon = "fa-heart-crack";
                         isSpam = true;
                     } else if (s.landing === 'PROMOTIONS') {
-                        badgeColor = "bg-slate-100 text-slate-700 border border-slate-200";
+                        badgeColor = "bg-pink-50 text-pink-700 border border-pink-200";
                         folderIcon = "fa-tags";
                     } else if (s.landing === 'SOCIAL') {
-                        badgeColor = "bg-slate-100 text-slate-700 border border-slate-200";
-                        folderIcon = "fa-users";
+                        badgeColor = "bg-pink-100 text-pink-800 border border-pink-200";
+                        folderIcon = "fa-user-group-heart";
                     } else if (s.landing === 'UPDATES') {
-                        badgeColor = "bg-slate-100 text-slate-700 border border-slate-200";
-                        folderIcon = "fa-bell";
+                        badgeColor = "bg-rose-50 text-rose-700 border border-rose-200";
+                        folderIcon = "fa-bell-heart";
                     } else if (s.landing === 'FORUMS') {
-                        badgeColor = "bg-slate-100 text-slate-700 border border-slate-200";
+                        badgeColor = "bg-rose-50 text-rose-600 border border-rose-100";
                         folderIcon = "fa-comments";
                     }
 
                     const spamClass = isSpam ? 'mail-item-spam hidden' : '';
 
                     return `
-                        <div class="mail-item ${spamClass} flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs hover:border-slate-300 transition-all">
+                        <div class="mail-item ${spamClass} flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2 p-3.5 rounded-2xl bg-rose-50/50 border border-rose-100/70 text-xs hover:border-pink-300 hover:bg-white transition-all shadow-sm">
                             <div class="flex items-center gap-3 overflow-hidden">
-                                <span class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-[8px] font-bold bg-white border border-slate-200 text-slate-500 rounded">${i+1}</span>
-                                <span class="text-slate-800 font-semibold truncate max-w-[280px]">${s.subject}</span>
+                                <span class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-[8px] font-black bg-white border border-rose-200 text-rose-500 rounded-lg shadow-sm">${i+1}</span>
+                                <span class="text-rose-950 font-bold truncate max-w-[280px]">${s.subject}</span>
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0 justify-end">
-                                <span class="inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${badgeColor}">
+                                <span class="inline-flex items-center gap-1 text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full ${badgeColor}">
                                     <i class="fa-solid ${folderIcon} text-[8px]"></i> ${s.landing}
                                 </span>
-                                <span class="text-[10px] font-medium text-slate-400 flex-shrink-0 font-mono-tech">${s.date} @ ${s.time}</span>
+                                <span class="text-[10px] font-semibold text-rose-400 flex-shrink-0 font-mono-tech">${s.date} @ ${s.time}</span>
                             </div>
                         </div>
                     `;
@@ -714,7 +857,7 @@
 
             row.innerHTML = `
                 <td class="px-6 py-4">${accountLabel}</td>
-                <td class="px-6 py-4"><span class="text-slate-800 font-mono-tech text-xs font-bold">${domain}</span></td>
+                <td class="px-6 py-4"><span class="text-rose-800 font-mono-tech text-xs font-bold bg-rose-50 px-2 py-1 rounded-md border border-rose-100">${domain}</span></td>
                 <td class="px-6 py-4">${subjectsHtml}</td>
                 <td class="px-6 py-4 text-right">${statusHtml}</td>
             `;
@@ -727,16 +870,16 @@
             const spamElements = document.querySelectorAll('.mail-item-spam');
 
             if (showSpamEmails) {
-                dom.toggleSpamIcon.className = "fa-solid fa-eye text-slate-600";
+                dom.toggleSpamIcon.className = "fa-solid fa-eye text-rose-600";
                 dom.toggleSpamText.textContent = "Hide Spam Mails";
                 dom.spamCounter.textContent = `${spamElements.length} Revealed`;
-                dom.spamCounter.className = "bg-slate-200 text-slate-700 border border-slate-300 px-1.5 py-0.5 rounded text-[10px] ml-1";
+                dom.spamCounter.className = "bg-rose-100 text-rose-700 border border-rose-200 px-2 py-0.5 rounded-full text-[10px] ml-1 font-bold";
                 spamElements.forEach(el => el.classList.remove('hidden'));
             } else {
-                dom.toggleSpamIcon.className = "fa-solid fa-eye-slash text-slate-400";
+                dom.toggleSpamIcon.className = "fa-solid fa-eye-slash text-rose-300";
                 dom.toggleSpamText.textContent = "Show Spam Mails";
                 dom.spamCounter.textContent = `${spamElements.length} Hidden`;
-                dom.spamCounter.className = "bg-slate-100 text-slate-600 border border-slate-200 px-1.5 py-0.5 rounded text-[10px] ml-1";
+                dom.spamCounter.className = "bg-rose-50 text-rose-600 border border-rose-100 px-2 py-0.5 rounded-full text-[10px] ml-1 font-bold";
                 spamElements.forEach(el => el.classList.add('hidden'));
             }
         });
@@ -747,7 +890,7 @@
             if (domains.length === 0) return;
 
             dom.sync.disabled = true;
-            dom.sync.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i><span class="tracking-wider">PROBING DATA NODE...</span>`;
+            dom.sync.innerHTML = `<i class="fa-solid fa-wand-sparkles animate-spin mr-1"></i><span class="tracking-widest">PROBING DATA NODE...</span>`;
             dom.empty.classList.add('hidden');
             dom.table.classList.remove('hidden');
             dom.clear.classList.remove('hidden');
@@ -775,7 +918,7 @@
 
             calculateCommonality(lastResults);
             dom.sync.disabled = false;
-            dom.sync.innerHTML = `<i class="fa-solid fa-bolt"></i><span class="tracking-wider uppercase">Sync Network</span>`;
+            dom.sync.innerHTML = `<i class="fa-solid fa-heart-pulse"></i><span class="tracking-widest uppercase">Sync Network</span>`;
         });
 
         function showToast() {
@@ -864,7 +1007,7 @@
                 document.body.removeChild(el);
                 
                 const originalIcon = dom.copy.innerHTML;
-                dom.copy.innerHTML = `<i class="fa-solid fa-check text-emerald-600"></i>`;
+                dom.copy.innerHTML = `<i class="fa-solid fa-crown text-pink-600"></i>`;
                 setTimeout(() => {
                     dom.copy.innerHTML = originalIcon;
                 }, 2000);
